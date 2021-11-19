@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, SafeAreaView, TextInput,TouchableOpacity,Modal } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import useToggleModalVisible from '../../customhooks/useToggleModalVisible'
-import ModalPicker from '../../components/ModalPicker'
+import useToggleModalVisible from '../customhooks/useToggleModalVisible'
+import ModalPicker from '../components/ModalPicker'
 
 
-const CreateScreen : React.FC = () => {
+const CreateProductScreen : React.FC = () => {
     const [productName,setProductName] = useState("");
     const [productPrice,setProductPrice] = useState("");
     const [selectedProductType, setSelectedProductType] = useState('Choose Type...');
@@ -64,7 +64,7 @@ const CreateScreen : React.FC = () => {
     )
 }
 
-export default CreateScreen
+export default CreateProductScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        
       },
       headerStyle:{
         textAlign: 'center', 
@@ -112,3 +113,4 @@ const styles = StyleSheet.create({
         top:10
       }
     })
+
