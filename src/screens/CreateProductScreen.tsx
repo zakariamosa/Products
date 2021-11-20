@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Text, SafeAreaView, TextInput,TouchableOpacity,Modal } from 'react-native'
+import { StyleSheet, View, Text, SafeAreaView, TextInput,TouchableOpacity,Modal , ScrollView} from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import useToggleModalVisible from '../customhooks/useToggleModalVisible'
 import ModalPicker from '../components/ModalPicker'
+import {IProductListScreen, ProductListScreen} from "./ProductListScreen";
 
-
-const CreateProductScreen : React.FC = () => {
+export const CreateProductScreen : React.FC = () => {
+  
     const [productName,setProductName] = useState("");
     const [productPrice,setProductPrice] = useState("");
     const [selectedProductType, setSelectedProductType] = useState('Choose Type...');
+
     //const [isModalVisible,setIsModalVisible] = useState(false);
     const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
     
@@ -16,7 +18,11 @@ const CreateProductScreen : React.FC = () => {
     const setModalData = (option:string)=>{
         setSelectedProductType(option)
     }
-
+    const product : IProductListScreen[] = [ 
+        {
+        productNam:productName,
+        productPric:productPrice,
+    },]
     return (
         <SafeAreaView style={styles.container}>
             
@@ -60,11 +66,14 @@ const CreateProductScreen : React.FC = () => {
                     setModalData={setModalData}/>
                 </Modal>
            </View>
+           <ScrollView>
+               {product.map((item,index)=>(
+                   <ProductListScreen key={index}  productPric = {item.productPric}/>
+               ))}
+           </ScrollView>
         </SafeAreaView>
     )
 }
-
-export default CreateProductScreen
 
 const styles = StyleSheet.create({
     container: {

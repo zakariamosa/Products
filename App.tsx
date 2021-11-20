@@ -3,14 +3,19 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {NavigationContainer} from "@react-navigation/native";
+import ProductListScreen from './src/screens/ProductListScreen';
 import CreateProductScreen from './src/screens/CreateProductScreen';
 
- const App : React.FC = () => {
+ const App  = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-         <Stack.Navigator initialRouteName="CreateProductScreen"> 
-            <Stack.Screen name="CreateProductScreen" component={CreateProductScreen} />
+         <Stack.Navigator initialRouteName="ProductListScreen"> 
+            <Stack.Screen name="ProductListScreen" component={ProductListScreen}  />
+            <Stack.Screen
+              name="CreateProductScreen"
+              component={CreateProductScreen}
+            />
           </Stack.Navigator>
       </NavigationContainer>
   );
