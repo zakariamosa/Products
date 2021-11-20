@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Text, SafeAreaView, TextInput,TouchableOpacity,Modal } from 'react-native'
+import React, { ChangeEvent, useState } from 'react'
+import { StyleSheet, View, Text, SafeAreaView, TextInput,TouchableOpacity,Modal, ScrollView } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import useToggleModalVisible from '../customhooks/useToggleModalVisible'
 import ModalPicker from '../components/ModalPicker'
+import {ProductListScreen} from './ProductListScreen'
+import { ITask } from '../helpers/Interfaces'
 
-
-const CreateProductScreen : React.FC = () => {
+export const CreateProductScreen : React.FC = () => {
     const [productName,setProductName] = useState("");
     const [productPrice,setProductPrice] = useState("");
     const [selectedProductType, setSelectedProductType] = useState('Choose Type...');
+    const [productNameList,setProductNameList] = useState<ITask[]>([]);
     //const [isModalVisible,setIsModalVisible] = useState(false);
     const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
     
@@ -16,6 +18,14 @@ const CreateProductScreen : React.FC = () => {
     const setModalData = (option:string)=>{
         setSelectedProductType(option)
     }
+    const handleChange =(event:ChangeEvent <HTMLInputElement>) : void  => {
+        setProductName(event.target.value)
+    }
+      const addTask = (): void => {
+        const newTask = { productName: productName, productPrice:productPrice   };
+        setProductNameList([...productNameList, newTask]);
+      
+      };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -29,7 +39,7 @@ const CreateProductScreen : React.FC = () => {
                 <TextInput 
                 style={styles.inputStyle}
                 defaultValue={productName}
-                onChangeText={(text)=>setProductName(text)} />
+                onChangeText={(text)=>setProductPrice(text)} />
                 <MaterialIcons style={styles.icon} name="add-to-queue" size={20} />
             </View>
             <View>
@@ -60,11 +70,18 @@ const CreateProductScreen : React.FC = () => {
                     setModalData={setModalData}/>
                 </Modal>
            </View>
+           <View>
+        <button onClick={addTask}>Add Task</button>
+      </View>
+      <View>
+        {productNameList.map((item, index) => {
+           <ProductListScreen  productName={item.productName} productPrice={item.productPrice} />;
+        })}
+         
+      </View>
         </SafeAreaView>
-    )
+    )   
 }
-
-export default CreateProductScreen
 
 const styles = StyleSheet.create({
     container: {
