@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { Button } from "@react-native-material/core";
 
 const OPTIONS = ["Integrated", "Peripheral"];
 const WIDTH = Dimensions.get("window").width;
@@ -28,7 +29,7 @@ const ModalPicker: React.FC<IModalPicker> = props => {
         key={index}
         onPress={() => onPressItem(item)}
       >
-        <Text style={styles.text}>{item}</Text>
+        <Text style={styles.item}>{item}</Text>
       </TouchableOpacity>
     );
   });
@@ -39,8 +40,10 @@ const ModalPicker: React.FC<IModalPicker> = props => {
       }}
       style={styles.container}
     >
-      <View style={[styles.modal, { width: WIDTH - 20, height: HEIGHT / 5 }]}>
+      <View style={[styles.modal, { width: WIDTH - 20, height: HEIGHT / 5.5 }]}>
+        <Text style={styles.text}>Product Type</Text>
         <ScrollView>{option}</ScrollView>
+        <Button style={styles.button} title="Cancel"></Button>
       </View>
     </TouchableOpacity>
   );
@@ -57,13 +60,24 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: "#fff",
     borderWidth: 1,
-    borderRadius: 8,
+    paddingBottom: 10,
   },
   option: {
     alignItems: "flex-start",
   },
-  text: {
-    margin: 20,
+  item: {
+    margin: 10,
     fontSize: 18,
+  },
+  text: {
+    margin: 10,
+    fontSize: 23,
+    fontWeight: "bold",
+  },
+  button: {
+    borderWidth: 1,
+    width: 100,
+    fontWeight: "bold",
+    marginLeft: 290,
   },
 });
