@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, SafeAreaView, TextInput,TouchableOpacity,Modal,Button, Alert } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import useToggleModalVisible from '../customhooks/useToggleModalVisible'
 import ModalPicker from '../components/ModalPicker'
+import ErrorMessage from '../components/ErrorMessage'
+import { tokens } from '../helpers/translations/appStrings'
+import { translate } from '../helpers/translations/translationConfig'
+
+
 
 
 
@@ -11,17 +16,20 @@ const CreateProductScreen : React.FC = () => {
     const [productPrice,setProductPrice] = useState<string|''>("");
     const priceNumber : number = parseFloat(productPrice);
     const [selectedProductType, setSelectedProductType] = useState<string>('Choose Type...');
-    //const {showErrorVisible,toggleErrorVisible} = useToggleErrorVisible();
-    //const [isModalVisible,setIsModalVisible] = useState(false);
     const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
-    
+    const [saveDisabled,setSaveDisabled] = useState(false);
     
     const setModalData = (option:string)=>{
         setSelectedProductType(option)
     }
 
+    useEffect(() => {
+      setSaveDisabled(productName.length === 0 || productPrice.length === 0 || selectedProductType.length === 0);
+    
+    }, [productName,productPrice,selectedProductType])
+
     const validatePrice = () => {
-        console.log("Inside validate Price",priceNumber,selectedProductType);
+        // console.log("Inside validate Price",priceNumber,selectedProductType);
         if(selectedProductType == 'Peripheral' && priceNumber < 0){
             Alert.alert("Error",
             "Please enter Price > 0 dollars",
@@ -48,16 +56,19 @@ const CreateProductScreen : React.FC = () => {
             ]
           );
 
-        }
-    }
+        } 
+
+        // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />   
+      }
+
+      
 
     return (
         <SafeAreaView style={styles.container}>
+            <Text style={styles.headerStyle}>{translate(tokens.screens.AddProductScreen.mainText)}</Text>
             
-            <Text style={styles.headerStyle}>Add New Product</Text>
-            
-            <View>
-                <Text>Product Name</Text>
+            <View style={styles.titletext}>
+                <Text>{translate(tokens.screens.AddProductScreen.productNameLabelText)}</Text>
             </View>
             <View style={styles.inputContainer}>
                 <TextInput 
@@ -66,8 +77,8 @@ const CreateProductScreen : React.FC = () => {
                 onChangeText={(text)=>setProductName(text)} />
                 <MaterialIcons style={styles.icon} name="add-to-queue" size={20} />
             </View>
-            <View>
-                <Text>Product Price</Text>
+            <View style={styles.titletext}>
+                <Text>{translate(tokens.screens.AddProductScreen.productPriceLabelText)}</Text>
             </View>
             <View style={styles.inputContainer}>
                 <TextInput style={styles.inputStyle}
@@ -76,8 +87,8 @@ const CreateProductScreen : React.FC = () => {
                 onChangeText={(text)=>setProductPrice(text)} />
                 <MaterialIcons style={styles.icon} name="money" size={20} />
             </View>
-            <View>
-                <Text>Product Type</Text>
+            <View style={styles.titletext}>
+                <Text>{translate(tokens.screens.AddProductScreen.productTypeLabelText)}</Text>
             </View>
             <View>
                 <TouchableOpacity style={styles.pickerStyle}
@@ -94,17 +105,29 @@ const CreateProductScreen : React.FC = () => {
                     <ModalPicker 
                     toggleModalVisibility={toggleModalVisible}
                     setModalData={setModalData}
-                    setPriceValue={priceNumber}
+                    
                     />
                 </Modal>
            </View>
-           <View style={styles.btnStyle}>
-                <Button  title="SAVE" color="white" onPress={()=>{
-                    
+           
+           <View style={styles.saveBtnStyle} >
+                <Button 
+                  title={translate(tokens.screens.AddProductScreen.saveButtonText)} 
+                  color={saveDisabled ? "grey" : 'blue'} 
+                  disabled={saveDisabled}
+                  onPress={()=>{
                     validatePrice();
-                    
-
                 }}></Button>
+                <MaterialIcons name="file-download" size={30} color={saveDisabled ? "grey" : 'blue'} />
+            </View>
+            <View style={styles.cancelBtnStyle}>
+                <Button  
+                title={translate(tokens.screens.AddProductScreen.cancelButtonText)} 
+                color="white" 
+                onPress={()=>{
+                        console.log("Cancel clicked");
+                    }}></Button>
+                <MaterialIcons name="cancel" size={30} color="white" />
             </View>
         </SafeAreaView>
     )
@@ -117,26 +140,44 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
-        
       },
       headerStyle:{
         textAlign: 'center', 
         fontWeight: 'bold',
-        fontSize: 18,
-        marginTop: 0,
+        fontSize: 20,
+        marginTop: 20,
         width: 200,
-        
       },
-      btnStyle:{
+      titletext:{
+        fontWeight:'bold',
+        fontSize:18,
+        margin:5,
+        textAlign:'left'
+      },
+      saveBtnStyle:{
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignSelf:"center",
         borderWidth:1,
         borderRadius:10,
         borderColor:'blue',
-        backgroundColor:"blue",
+        width:'80%',
+        color:'white',
+        margin:10,
+        textAlign:'center'
   },
+  cancelBtnStyle:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf:"center",
+    borderWidth:1,
+    borderRadius:10,
+    borderColor:'blue',
+    width:'80%',
+    backgroundColor:'blue',
+    color:'white',
+    textAlign:'center'
+},
       inputStyle:{
         flex:1,
         backgroundColor:'white',
@@ -174,6 +215,18 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 10,
         top:10
+      },
+      buttonStyle:{ 
+        borderRadius:5, 
+        paddingVertical:10, 
+        paddingHorizontal:30, 
+        flexDirection: 'row', 
+        backgroundColor: '#3578E5' 
+      },
+      buttonText:{ 
+        marginLeft: 10, 
+        color: '#fff', 
+        fontWeight: 'bold' 
       }
     })
 
