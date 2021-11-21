@@ -16,11 +16,16 @@ const HEIGHT = Dimensions.get("window").height;
 interface IModalPicker {
   toggleModalVisibility: (bool: boolean) => void;
   setModalData: (option: string) => void;
+  setPriceValue: number;
+  //toggleErrorVisibility : (option:string) => void;
 }
 const ModalPicker: React.FC<IModalPicker> = props => {
+  console.log("inside Modal picker");
   const onPressItem = (option: string) => {
     props.toggleModalVisibility(false);
     props.setModalData(option);
+
+    //props.toggleErrorVisibility(option);
   };
   const option = OPTIONS.map((item, index) => {
     return (
@@ -29,7 +34,7 @@ const ModalPicker: React.FC<IModalPicker> = props => {
         key={index}
         onPress={() => onPressItem(item)}
       >
-        <Text style={styles.item}>{item}</Text>
+        <Text style={styles.text}>{item}</Text>
       </TouchableOpacity>
     );
   });
