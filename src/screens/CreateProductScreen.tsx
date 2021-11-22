@@ -6,9 +6,7 @@ import ModalPicker from '../components/ModalPicker'
 import ErrorMessage from '../components/ErrorMessage'
 import { tokens } from '../helpers/translations/appStrings'
 import { translate } from '../helpers/translations/translationConfig'
-
-
-
+import ProductProvider, { IProducts, ProductContext } from "../context/ProductContext";
 
 
 const CreateProductScreen : React.FC = () => {
@@ -18,13 +16,17 @@ const CreateProductScreen : React.FC = () => {
     const [selectedProductType, setSelectedProductType] = useState<string>('Choose Type...');
     const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
     const [saveDisabled,setSaveDisabled] = useState(false);
-    
+
+    const [productsList, setProductsList] = React.useState<IProducts[]>([])
+    const appContext = React.useContext(ProductContext);
+
+
     const setModalData = (option:string)=>{
         setSelectedProductType(option)
     }
 
     useEffect(() => {
-      setSaveDisabled(productName.length === 0 || productPrice.length === 0 || selectedProductType.length === 0);
+      setSaveDisabled(productName.length === 0 || productPrice.length === 0 || selectedProductType == 'Choose Type...');
     
     }, [productName,productPrice,selectedProductType])
 
@@ -61,7 +63,23 @@ const CreateProductScreen : React.FC = () => {
         // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />   
       }
 
+    const saveProducts = () => {
+      //appContext?.addProduct(productName,priceNumber,selectedProductType);
+
+      appContext?.productsList?.map((product,i) => (
+        
+        product.productName = productName,
+        product.productPrice = priceNumber,
+        product.productType = selectedProductType
+
+        setProductsList([...productsList,setProductsList])
+        
+        ))
+
+        appContext?.saveProduct(productsList)
+
       
+    }  
 
     return (
         <SafeAreaView style={styles.container}>
@@ -74,7 +92,9 @@ const CreateProductScreen : React.FC = () => {
                 <TextInput 
                 style={styles.inputStyle}
                 defaultValue={productName}
-                onChangeText={(text)=>setProductName(text)} />
+                onChangeText={(text)=>{
+                  setProductName(text)
+                  }} />
                 <MaterialIcons style={styles.icon} name="add-to-queue" size={20} />
             </View>
             <View style={styles.titletext}>
@@ -117,6 +137,7 @@ const CreateProductScreen : React.FC = () => {
                   disabled={saveDisabled}
                   onPress={()=>{
                     validatePrice();
+                    saveProducts();
                 }}></Button>
                 <MaterialIcons name="file-download" size={30} color={saveDisabled ? "grey" : 'blue'} />
             </View>
