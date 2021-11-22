@@ -16,7 +16,7 @@ const HEIGHT = Dimensions.get("window").height;
 interface IModalPicker {
   toggleModalVisibility: (bool: boolean) => void;
   setModalData: (option: string) => void;
-  setPriceValue: number;
+
   //toggleErrorVisibility : (option:string) => void;
 }
 const ModalPicker: React.FC<IModalPicker> = props => {
