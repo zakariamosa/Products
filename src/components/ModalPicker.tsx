@@ -34,7 +34,7 @@ const ModalPicker: React.FC<IModalPicker> = props => {
         key={index}
         onPress={() => onPressItem(item)}
       >
-        <Text style={styles.text}>{item}</Text>
+        <Text style={styles.item}>{item}</Text>
       </TouchableOpacity>
     );
   });
