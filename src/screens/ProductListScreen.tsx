@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     height: 70,
-    backgroundColor: "violet",
+    backgroundColor: "#8a2be2",
     borderRadius: 100,
   },
   textStyle: {

@@ -8,12 +8,16 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Foundation, Feather } from "@expo/vector-icons";
 import useToggleModalVisible from "../customhooks/useToggleModalVisible";
 import ModalPicker from "../components/ModalPicker";
 import { TextInput, Button } from "@react-native-material/core";
+import { StackScreens } from "../helpers/types";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-const CreateProductScreen: React.FC = () => {
+const CreateProductScreen: React.FC<
+  NativeStackScreenProps<StackScreens, "CreateProductScreen">
+> = props => {
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
   const priceNumber: number = parseFloat(productPrice);
@@ -101,14 +105,35 @@ const CreateProductScreen: React.FC = () => {
           />
         </Modal>
       </View>
-      <View style={styles.btnStyle}>
+      <View>
         <Button
+          style={styles.btnStyleSave}
           title="SAVE"
-          color="white"
           onPress={() => {
             validatePrice();
           }}
         ></Button>
+        <Feather
+          style={styles.btwSaveIcon}
+          name="download"
+          size={22}
+          color="black"
+        />
+      </View>
+      <View>
+        <Button
+          style={styles.btnStyleCancel}
+          title="Cancel"
+          onPress={() => {
+            props.navigation.navigate("ProductListScreen");
+          }}
+        ></Button>
+        <Foundation
+          style={styles.btwCancelIcon}
+          name="prohibited"
+          size={22}
+          color="black"
+        />
       </View>
     </SafeAreaView>
   );
@@ -130,14 +155,25 @@ const styles = StyleSheet.create({
     marginTop: 0,
     width: 200,
   },
-  btnStyle: {
+  btnStyleSave: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: "blue",
-    backgroundColor: "blue",
+    marginTop: 10,
+    marginLeft: -120,
+    width: 90,
+  },
+  btnStyleCancel: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: -36,
+    marginLeft: 78,
+    width: 105,
   },
   inputStyle: {
     flex: 1,
@@ -165,7 +201,6 @@ const styles = StyleSheet.create({
   pickerText: {
     marginVertical: 10,
     fontSize: 18,
-    borderWidth: 2,
   },
   dropDownStyle: {
     color: "black",
@@ -175,6 +210,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 50,
     top: 40,
+  },
+  btwSaveIcon: {
+    position: "absolute",
+    right: 22,
+    top: 14,
+  },
+  btwCancelIcon: {
+    position: "absolute",
+    right: 7,
+    top: -29,
   },
   textStyle: {
     fontSize: 20,
