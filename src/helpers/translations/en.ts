@@ -6,6 +6,7 @@ export const english = {
     [tokens.screens.AddProductScreen.productPriceLabelText]:"Product Price",
     [tokens.screens.AddProductScreen.productTypeLabelText]:"Product Type",
     [tokens.screens.AddProductScreen.saveButtonText]:"SAVE",
-    [tokens.screens.AddProductScreen.cancelButtonText]:"CANCEL"
+    [tokens.screens.AddProductScreen.cancelButtonText]:"CANCEL",
+    [tokens.screens.EditProductScreen.mainText]: "Edit Product"
 
 }

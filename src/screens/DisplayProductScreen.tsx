@@ -37,16 +37,16 @@ const DisplayProductScreen: React.FC<
         <FlatList
         data={appContext?.productsList}
         keyExtractor={(product) => product.productName}
-        renderItem={({ item }) => {
+        renderItem={({ item,index }) => {
           return (
-            <TouchableOpacity
-              //onPress={() => navigation.navigate('Show', { id: item.id })}
+            <TouchableOpacity key={index}
+              onPress={() => props.navigation.navigate('EditProductScreen',{selectedProduct:item})}
             >
               <View style={styles.row}>
                 <Text style={styles.title}>
                   {item.productName} - {item.productType} - {item.productPrice}
                 </Text>
-                <TouchableOpacity /*onPress={() => deleteProductPost(item.id)}*/>
+                <TouchableOpacity onPress={() => {appContext?.deleteProduct(item.id)}}>
                   <Feather style={styles.icon} name="trash" />
                 </TouchableOpacity>
               </View>

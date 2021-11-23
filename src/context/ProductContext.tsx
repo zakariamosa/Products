@@ -1,18 +1,20 @@
 import React, { useState } from "react";
+import { Alert } from "react-native";
 
-export interface IProducts  {
+ export interface IProducts  {
     id:number
     productName: string
     productPrice: number
     productType: string
     //statusAvailable:boolean
-  }
+  } 
 
      export interface IProductContextType  {
     productsList?: IProducts[];
     saveProduct: (product: IProducts) => void;
-    //updateProduct: (id: number) => void;
-    checkProduct : (product:IProducts) => boolean;
+    editProduct: (id: number,productName:string,productPrice:number,productType:string) => void;
+    checkProduct : (productName:string) => boolean;
+    deleteProduct : (productId:number) => void;
     isProductValidated:boolean;
   }   
 
@@ -26,11 +28,6 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
     
 
      const saveProduct = (product:IProducts) => {
-
-      /* if(productsList.map((item)=>item.productName === product.productName))
-      {
-            console.log("Product Name already exists");
-      } */
         
     console.log("Inside saveContext product object value: ",product.id,product.productName,product.productPrice,product.productType)
          const newProduct : IProducts = {
@@ -44,40 +41,72 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
         //setIsProductValidated(false)
       } 
 
-    const checkProduct = (product:IProducts)=>{
+    const checkProduct = (productName:string)=>{
         productsList.filter((products: IProducts) => {
-          if (products.productName === product.productName) 
+          console.log("Products element array:",products.productName);
+          if (products.productName == productName) 
           {
-            //product.statusAvailable = true
-             
+          
             setIsProductValidated(true);
-            console.log("duplicate product");
-            //return false
+            //console.log("duplicate product");
+            
+          }
+          else{
+            setIsProductValidated(false);
           }
         })
 
-        if(isProductValidated){return false}
-        else {return true};
+        if(isProductValidated == true)
+        {
+          console.log("IsProductValidated in if:",isProductValidated);
+          Alert.alert("Error", "Duplicate Product Values", [
+            
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+          return false
+        }
+
+        else {
+          console.log("isProductValidated in else:",isProductValidated)
+          return true
+        }
       }
       
-      /* const updateProduct = (id: number) => {
+    const editProduct = (id: number,productName:string,productPrice:number,productType:string) => {
+      console.log("Inside Edit product in context");
         productsList.filter((product: IProducts) => {
           if (product.id === id) {
-            product.status = true
-            setProductsList([...productsList])
+            let temp_state = [...productsList];
+            console.log("temp_state array value:",temp_state);
+            let temp_element = product;
+            console.log("temp_element object value:",temp_element);
+            temp_element.productName = productName;
+            temp_element.productPrice = productPrice;
+            temp_element.productType = productType;
+            temp_state[product.id] = temp_element;
+            setProductsList(temp_state);
           }
         })
-      } */
+      } 
+
+      const deleteProduct = (productId:number) => {
+        console.log("inside delete context function:",productId);
+        
+        setProductsList([...productsList.filter(e=>e.id !== productId)])
+
+        console.log("New Product list Array:",productsList);
+
+      }
 
       return(
         
         <ProductContext.Provider value={{
             productsList,
             saveProduct,
+            editProduct,
             checkProduct,
-            isProductValidated
-            //updateProduct,
-            
+            deleteProduct,
+            isProductValidated 
         }}>
             {props.children}
         </ProductContext.Provider>

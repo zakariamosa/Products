@@ -7,10 +7,15 @@ enum CreateProductScreen{
     cancelButtonText = "cancel-button-text",
 }
 
+enum EditProductScreen{
+    mainText = "editProduct-main-text",
+}
+
 
 
 export const tokens = {
     screens:{
-        AddProductScreen:CreateProductScreen
+        AddProductScreen:CreateProductScreen,
+        EditProductScreen:EditProductScreen
     }
 }
