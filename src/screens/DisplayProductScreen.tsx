@@ -5,23 +5,28 @@ import {
   View,
   Text,
   SafeAreaView,
-  TextInput,
   TouchableOpacity,
   Modal,
-  Button,
   Alert,
   FlatList,
 } from "react-native";
 import { FAB } from "react-native-paper";
 import ProductProvider, { ProductContext } from "../context/ProductContext";
 import { StackScreens } from "../helpers/types";
-import { Feather } from '@expo/vector-icons';
-
+import { Feather } from "@expo/vector-icons";
+import { translate } from "i18n-js";
+import { tokens } from "../helpers/translations/appStrings";
+import { TextInput, Button } from "@react-native-material/core";
 const DisplayProductScreen: React.FC<
   NativeStackScreenProps<StackScreens, "DisplayProductScreen">
 > = props => {
   //const { productsList,saveProduct,updateProduct } = useContext(ProductContext);
   const appContext = useContext(ProductContext);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [inputProduct, setInputProduct] = useState<string>("");
+
+  const saveEditProduct = () => {};
+
   return (
     <>
       <View>
@@ -33,30 +38,56 @@ const DisplayProductScreen: React.FC<
           ))}
         </Text> */}
 
-
         <FlatList
-        data={appContext?.productsList}
-        keyExtractor={(product) => product.productName}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              //onPress={() => navigation.navigate('Show', { id: item.id })}
-            >
-              <View style={styles.row}>
-                <Text style={styles.title}>
-                  {item.productName} - {item.productType} - {item.productPrice}
-                </Text>
-                <TouchableOpacity /*onPress={() => deleteProductPost(item.id)}*/>
-                  <Feather style={styles.icon} name="trash" />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-
-
+          data={appContext?.productsList}
+          keyExtractor={product => product.productName}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                //onPress={() => navigation.navigate('Show', { id: item.id })}
+                onPress={() => setIsModalVisible(true)}
+              >
+                <View style={styles.row}>
+                  <Text style={styles.title}>
+                    {item.productName} - {item.productType} -{" "}
+                    {item.productPrice}
+                  </Text>
+                  <TouchableOpacity /*onPress={() => deleteProductPost(item.id)}*/
+                  >
+                    <Feather style={styles.icon} name="trash" />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+        <Modal
+          animationType="fade"
+          visible={isModalVisible}
+          onRequestClose={() => setIsModalVisible(false)}
+        >
+          <View style={styles.modalView}>
+            <Text style={styles.headerStyle}>Edit Product</Text>
+            <View style={styles.modalDesign}>
+              <TextInput
+                label="Edit Product"
+                style={styles.inputStyle}
+                //              onChangeText={text => setInputProduct(text)}
+                defaultValue={inputProduct}
+                editable={true}
+                multiline={false}
+                maxLength={200}
+              />
+              <TouchableOpacity>
+                <Button
+                  title="Save"
+                  style={styles.btnStyleSave}
+                  onPress={() => saveEditProduct()}
+                ></Button>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
 
       <FAB
@@ -95,17 +126,61 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 20,
     paddingHorizontal: 10,
     borderTopWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
   },
   title: {
     fontSize: 18,
   },
   icon: {
     fontSize: 24,
+  },
+  modalView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalDesign: {
+    borderWidth: 2,
+    width: 350,
+    height: 200,
+  },
+  inputStyle: {
+    backgroundColor: "white",
+    fontSize: 25,
+    width: "80%",
+    height: 50,
+    borderRadius: 15,
+    marginTop: 30,
+    marginLeft: 30,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    paddingBottom: 10,
+  },
+  save: {
+    backgroundColor: "red",
+    paddingHorizontal: 100,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  headerStyle: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 18,
+    padding: 20,
+  },
+  btnStyleSave: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: 30,
+    width: 80,
   },
 });
