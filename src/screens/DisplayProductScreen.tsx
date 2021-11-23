@@ -24,11 +24,9 @@ const DisplayProductScreen: React.FC<
     <>
       <View>
         <Text>
-          {appContext?.productsList?.map((productsList, i) => (
+          {appContext?.productsList?.map((products, index) => (
             <>
-              <Text key={i}>{productsList.productName}</Text>
-              <Text key={i}>{productsList.productPrice}</Text>
-              <Text key={i}>{productsList.productType}</Text>
+              <Text key={index}>{products.productName},{products.productPrice},{products.productType}</Text>
             </>
           ))}
         </Text>
