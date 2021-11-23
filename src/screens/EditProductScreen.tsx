@@ -1,113 +1,39 @@
-import React, { useEffect, useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   SafeAreaView,
   TouchableOpacity,
+  Text,
   Modal,
-  Alert,
 } from "react-native";
+import { StackScreens } from "../helpers/types";
+import { TextInput, Button } from "@react-native-material/core";
 import { MaterialIcons, Foundation, Feather } from "@expo/vector-icons";
 import useToggleModalVisible from "../customhooks/useToggleModalVisible";
 import ModalPicker from "../components/ModalPicker";
-import { TextInput, Button } from "@react-native-material/core";
-import { StackScreens } from "../helpers/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import ErrorMessage from "../components/ErrorMessage";
 import { tokens } from "../helpers/translations/appStrings";
 import { translate } from "../helpers/translations/translationConfig";
-import { ProductContext } from "../context/ProductContext";
-import ProductProvider, {
-  IProductContextType,
-  IProducts,
-} from "../context/ProductContext";
 
-const CreateProductScreen: React.FC<
-  NativeStackScreenProps<StackScreens, "CreateProductScreen">
+const EditProductScreen: React.FC<
+  NativeStackScreenProps<StackScreens, "EditProductScreen">
 > = props => {
-  const [productName, setProductName] = useState<string>("");
-  const [productPrice, setProductPrice] = useState<string | "">("");
-  const priceNumber: number = parseFloat(productPrice);
-  const [productPriceAmount, setProductPriceAmount] =
-    useState<number>(priceNumber);
+  const [inputProduct, setInputProduct] = useState<string>("");
+  const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [selectedProductType, setSelectedProductType] = useState<string>(
     "Choose Product Type..."
   );
-  const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
-  const [saveDisabled, setSaveDisabled] = useState(false);
-
-  const [productsAdded, setProductsAdded] = React.useState<IProducts>();
-  const appContext = React.useContext(ProductContext);
 
   const setModalData = (option: string) => {
     setSelectedProductType(option);
   };
 
-  useEffect(() => {
-    setSaveDisabled(
-      productName.length === 0 ||
-        productPrice.length === 0 ||
-        selectedProductType == "Choose Product Type..."
-    );
-  }, [productName, productPrice, selectedProductType]);
-
-  const validatePrice = () => {
-    // console.log("Inside validate Price",priceNumber,selectedProductType);
-    if (selectedProductType == "Peripheral" && priceNumber < 0) {
-      Alert.alert("Error", "Please enter Price > 0 dollars", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-    }
-    if (
-      selectedProductType == "Integrated" &&
-      (priceNumber > 2600 || priceNumber < 1000)
-    ) {
-      Alert.alert("Error", "Please enter Price between 1000 and 2600 dollars", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-    }
-
-    // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
-  };
-
-  const saveProducts = () => {
-    console.log("Inside Save funstion");
-    setProductPriceAmount(priceNumber);
-    const newAddedProduct: IProducts = {
-      id: Math.random(),
-      productName: productName,
-      productPrice: productPriceAmount,
-      productType: selectedProductType,
-    };
-    setProductsAdded(newAddedProduct);
-    appContext?.saveProduct(newAddedProduct);
-
-    console.log(
-      "Productslist in after save in create screen:",
-      newAddedProduct.id,
-      newAddedProduct.productName,
-      newAddedProduct.productPrice,
-      newAddedProduct.productType
-    );
-
-    props.navigation.goBack();
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerStyle}>
-        {translate(tokens.screens.AddProductScreen.mainText)}
+        {/* {translate(tokens.screens.AddProductScreen.mainText)} */}
+        Edit Product
       </Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -115,8 +41,8 @@ const CreateProductScreen: React.FC<
             tokens.screens.AddProductScreen.productNameLabelText
           )}
           style={styles.inputStyle}
-          defaultValue={productName}
-          onChangeText={text => setProductName(text)}
+          //defaultValue={productName}
+          //onChangeText={text => setProductName(text)}
         />
         <MaterialIcons style={styles.icon} name="add-to-queue" size={30} />
       </View>
@@ -128,12 +54,12 @@ const CreateProductScreen: React.FC<
           style={styles.inputStyle}
           // defaultValue={productPrice}
           keyboardType="decimal-pad"
-          onChangeText={text => setProductPrice(text)}
+          //onChangeText={text => setProductPrice(text)}
         />
         <MaterialIcons style={styles.icon} name="money" size={30} />
       </View>
       <View>
-        <Text>
+        <Text style={styles.productTypeLabel}>
           {translate(tokens.screens.AddProductScreen.productTypeLabelText)}
         </Text>
       </View>
@@ -165,19 +91,16 @@ const CreateProductScreen: React.FC<
       <View>
         <Button
           title={translate(tokens.screens.AddProductScreen.saveButtonText)}
-          color={saveDisabled ? "grey" : "green"}
+          //color={saveDisabled ? "grey" : "green"}
           style={styles.btnStyleSave}
-          disabled={saveDisabled}
-          onPress={() => {
-            validatePrice();
-            saveProducts();
-          }}
+          //disabled={saveDisabled}
+          onPress={() => {}}
         ></Button>
         <Feather
           style={styles.btwSaveIcon}
           name="download"
           size={22}
-          color={saveDisabled ? "black" : "white"}
+          //color={saveDisabled ? "black" : "white"}
         />
       </View>
       <View>
@@ -199,22 +122,27 @@ const CreateProductScreen: React.FC<
     </SafeAreaView>
   );
 };
-
-export default CreateProductScreen;
+export default EditProductScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
   headerStyle: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 18,
-    marginTop: 0,
-    width: 200,
+    padding: 20,
+  },
+  inputStyle: {
+    backgroundColor: "white",
+    fontSize: 25,
+    width: "80%",
+    height: 50,
+    borderRadius: 15,
+    marginTop: 30,
   },
   btnStyleSave: {
     flexDirection: "row",
@@ -222,34 +150,24 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 10,
-    marginTop: 10,
-    marginLeft: -120,
+    marginTop: 20,
     width: 100,
-  },
-  btnStyleCancel: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignSelf: "center",
-    backgroundColor: "#8a2be2",
-    borderWidth: 1,
-    borderRadius: 10,
-    marginTop: -38,
-    marginLeft: 90,
-    width: 105,
-  },
-  inputStyle: {
-    flex: 1,
-    backgroundColor: "white",
-    fontSize: 25,
-    width: "80%",
-    height: 50,
-    margin: 20,
-    borderRadius: 15,
+    marginLeft: -150,
   },
   inputContainer: {
     flexDirection: "row",
     borderColor: "#000",
     paddingBottom: 10,
+  },
+  modalView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalDesign: {
+    borderWidth: 2,
+    width: 350,
+    height: 200,
   },
   pickerStyle: {
     paddingHorizontal: 10,
@@ -275,15 +193,27 @@ const styles = StyleSheet.create({
   },
   btwSaveIcon: {
     position: "absolute",
-    right: 15,
-    top: 14,
+    right: 30,
+    top: 25,
   },
   btwCancelIcon: {
     position: "absolute",
     right: 7,
     top: -31,
   },
-  textStyle: {
-    fontSize: 20,
+  btnStyleCancel: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    backgroundColor: "#8a2be2",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: -38,
+    marginLeft: 90,
+    width: 105,
+  },
+  productTypeLabel: {
+    marginTop: 15,
+    fontSize: 18,
   },
 });

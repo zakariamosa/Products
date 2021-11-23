@@ -17,15 +17,13 @@ import { Feather } from "@expo/vector-icons";
 import { translate } from "i18n-js";
 import { tokens } from "../helpers/translations/appStrings";
 import { TextInput, Button } from "@react-native-material/core";
+import { Item } from "react-native-paper/lib/typescript/components/List/List";
 const DisplayProductScreen: React.FC<
   NativeStackScreenProps<StackScreens, "DisplayProductScreen">
 > = props => {
   //const { productsList,saveProduct,updateProduct } = useContext(ProductContext);
   const appContext = useContext(ProductContext);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [inputProduct, setInputProduct] = useState<string>("");
-
-  const saveEditProduct = () => {};
+  const [isRender, setIsRender] = useState(false);
 
   return (
     <>
@@ -45,7 +43,7 @@ const DisplayProductScreen: React.FC<
             return (
               <TouchableOpacity
                 //onPress={() => navigation.navigate('Show', { id: item.id })}
-                onPress={() => setIsModalVisible(true)}
+                onPress={() => props.navigation.navigate("EditProductScreen")}
               >
                 <View style={styles.row}>
                   <Text style={styles.title}>
@@ -60,34 +58,8 @@ const DisplayProductScreen: React.FC<
               </TouchableOpacity>
             );
           }}
+          extraData={isRender}
         />
-        <Modal
-          animationType="fade"
-          visible={isModalVisible}
-          onRequestClose={() => setIsModalVisible(false)}
-        >
-          <View style={styles.modalView}>
-            <Text style={styles.headerStyle}>Edit Product</Text>
-            <View style={styles.modalDesign}>
-              <TextInput
-                label="Edit Product"
-                style={styles.inputStyle}
-                //              onChangeText={text => setInputProduct(text)}
-                defaultValue={inputProduct}
-                editable={true}
-                multiline={false}
-                maxLength={200}
-              />
-              <TouchableOpacity>
-                <Button
-                  title="Save"
-                  style={styles.btnStyleSave}
-                  onPress={() => saveEditProduct()}
-                ></Button>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
       </View>
 
       <FAB
