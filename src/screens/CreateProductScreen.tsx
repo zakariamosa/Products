@@ -25,6 +25,7 @@ import ProductProvider, {
 
   
   const CreateProductScreen: React.FC<NativeStackScreenProps<StackScreens, "CreateProductScreen">> = props => {
+
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
   let priceNumber: number = parseFloat(productPrice);
@@ -35,6 +36,11 @@ import ProductProvider, {
   const [saveDisabled, setSaveDisabled] = useState(false);
 
   const [productsAdded, setProductsAdded] = React.useState<IProducts>();
+  const [productsNameCheck,setProductNameCheck] = React.useState <Array<{
+    key: string,
+    value: string
+}>>([]);
+  
   const appContext = React.useContext(ProductContext);
 
   const setModalData = (option: string) => {
@@ -48,6 +54,19 @@ import ProductProvider, {
         selectedProductType == "Choose Product Type..."
     );
   }, [productName, productPrice, selectedProductType]);
+
+  const addProductName = () => {
+    console.log("Inside add ProductName function");
+    /* const products:string[] =[''];
+    let itemAdded:string = productName;
+    let nArr = products?.concat(itemAdded);
+    console.log("Array value string:",products); */
+
+    setProductNameCheck((item) => [...item, { key: Math.random().toString(), value: productName }])
+
+    {productsNameCheck.map((p,i)=>console.log("add product string array:",p));}
+    
+  }
 
   const validatePrice = () => {
     console.log("Inside validate Price",priceNumber);
@@ -75,8 +94,15 @@ import ProductProvider, {
       ]);
     }
     else{
+      
+      
+      //itemAdded.concat([...itemAdded,productName]);
+      
     saveProducts(priceNumber);
-    }
+    
+  }
+
+  
 
     // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
   };
@@ -89,14 +115,17 @@ import ProductProvider, {
           productPrice: priceNumber,
           productType: selectedProductType,
 }
+       if(appContext?.checkProduct(newAddedProduct))
+        {
         setProductsAdded(newAddedProduct);
         appContext?.saveProduct(newAddedProduct);
-       
         console.log("Productslist in after save in create screen:",newAddedProduct.id,newAddedProduct.productName,newAddedProduct.productPrice,newAddedProduct.productType);
         
         props.navigation.goBack();
+        }
+        
     
-  };
+  }
 
 
   return (
