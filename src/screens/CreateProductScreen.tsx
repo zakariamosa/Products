@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -14,6 +14,13 @@ import ModalPicker from "../components/ModalPicker";
 import { TextInput, Button } from "@react-native-material/core";
 import { StackScreens } from "../helpers/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import ErrorMessage from "../components/ErrorMessage";
+import { tokens } from "../helpers/translations/appStrings";
+import { translate } from "../helpers/translations/translationConfig";
+import ProductProvider, {
+  IProducts,
+  ProductContext,
+} from "../context/ProductContext";
 
 const CreateProductScreen: React.FC<
   NativeStackScreenProps<StackScreens, "CreateProductScreen">
@@ -21,18 +28,29 @@ const CreateProductScreen: React.FC<
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
   const priceNumber: number = parseFloat(productPrice);
-  const [selectedProductType, setSelectedProductType] =
-    useState<string>("Choose Type...");
-  //const {showErrorVisible,toggleErrorVisible} = useToggleErrorVisible();
-  //const [isModalVisible,setIsModalVisible] = useState(false);
+  const [selectedProductType, setSelectedProductType] = useState<string>(
+    "Choose Product Type..."
+  );
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
+  const [saveDisabled, setSaveDisabled] = useState(false);
+
+  const [productsList, setProductsList] = React.useState<IProducts[]>([]);
+  const appContext = React.useContext(ProductContext);
 
   const setModalData = (option: string) => {
     setSelectedProductType(option);
   };
 
+  useEffect(() => {
+    setSaveDisabled(
+      productName.length === 0 ||
+        productPrice.length === 0 ||
+        selectedProductType == "Choose Product Type..."
+    );
+  }, [productName, productPrice, selectedProductType]);
+
   const validatePrice = () => {
-    console.log("Inside validate Price", priceNumber, selectedProductType);
+    // console.log("Inside validate Price",priceNumber,selectedProductType);
     if (selectedProductType == "Peripheral" && priceNumber < 0) {
       Alert.alert("Error", "Please enter Price > 0 dollars", [
         {
@@ -56,14 +74,36 @@ const CreateProductScreen: React.FC<
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
     }
+
+    // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
+  };
+
+  const saveProducts = () => {
+    //appContext?.addProduct(productName,priceNumber,selectedProductType);
+
+    appContext?.productsList?.map(
+      (product, i) => (
+        (product.productName = productName),
+        (product.productPrice = priceNumber),
+        (product.productType = selectedProductType)
+
+        //setProductsList([...productsList,setProductsList])
+      )
+    );
+
+    // appContext?.saveProduct(productsList)
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.headerStyle}>Create New Product</Text>
+      <Text style={styles.headerStyle}>
+        {translate(tokens.screens.AddProductScreen.mainText)}
+      </Text>
       <View style={styles.inputContainer}>
         <TextInput
-          label="Product Name"
+          label={translate(
+            tokens.screens.AddProductScreen.productNameLabelText
+          )}
           style={styles.inputStyle}
           defaultValue={productName}
           onChangeText={text => setProductName(text)}
@@ -72,13 +112,20 @@ const CreateProductScreen: React.FC<
       </View>
       <View style={styles.inputContainer}>
         <TextInput
-          label="Product Price"
+          label={translate(
+            tokens.screens.AddProductScreen.productPriceLabelText
+          )}
           style={styles.inputStyle}
           // defaultValue={productPrice}
           keyboardType="decimal-pad"
           onChangeText={text => setProductPrice(text)}
         />
         <MaterialIcons style={styles.icon} name="money" size={30} />
+      </View>
+      <View>
+        <Text>
+          {translate(tokens.screens.AddProductScreen.productTypeLabelText)}
+        </Text>
       </View>
       <View>
         <TouchableOpacity
@@ -101,31 +148,41 @@ const CreateProductScreen: React.FC<
           <ModalPicker
             toggleModalVisibility={toggleModalVisible}
             setModalData={setModalData}
-            setPriceValue={priceNumber}
           />
         </Modal>
       </View>
+
       <View>
         <Button
+          title={translate(tokens.screens.AddProductScreen.saveButtonText)}
+          color={saveDisabled ? "grey" : "#8a2be2"}
           style={styles.btnStyleSave}
-          title="SAVE"
+          disabled={saveDisabled}
           onPress={() => {
             validatePrice();
+            saveProducts();
           }}
         ></Button>
         <Feather
           style={styles.btwSaveIcon}
           name="download"
           size={22}
-          color="black"
+          color={saveDisabled ? "black" : "blue"}
         />
+        {/*  <MaterialIcons
+          style={styles.btwSaveIcon}
+          name="file-download"
+          size={30}
+          color={saveDisabled ? "grey" : "blue"}
+        /> */}
       </View>
       <View>
         <Button
+          title={translate(tokens.screens.AddProductScreen.cancelButtonText)}
+          color="white"
           style={styles.btnStyleCancel}
-          title="Cancel"
           onPress={() => {
-            props.navigation.navigate("ProductListScreen");
+            props.navigation.navigate("DisplayProductScreen");
           }}
         ></Button>
         <Foundation
@@ -163,16 +220,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     marginLeft: -120,
-    width: 90,
+    width: 100,
   },
   btnStyleCancel: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignSelf: "center",
+    backgroundColor: "#8a2be2",
     borderWidth: 1,
     borderRadius: 10,
-    marginTop: -36,
-    marginLeft: 78,
+    marginTop: -38,
+    marginLeft: 90,
     width: 105,
   },
   inputStyle: {
@@ -213,13 +271,13 @@ const styles = StyleSheet.create({
   },
   btwSaveIcon: {
     position: "absolute",
-    right: 22,
+    right: 15,
     top: 14,
   },
   btwCancelIcon: {
     position: "absolute",
     right: 7,
-    top: -29,
+    top: -31,
   },
   textStyle: {
     fontSize: 20,
