@@ -27,8 +27,7 @@ import ProductProvider, {
   const CreateProductScreen: React.FC<NativeStackScreenProps<StackScreens, "CreateProductScreen">> = props => {
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
-  const priceNumber: number = parseFloat(productPrice);
-  const [productPriceAmount,setProductPriceAmount] = useState<number>(priceNumber);
+  let priceNumber: number = parseFloat(productPrice);
   const [selectedProductType, setSelectedProductType] = useState<string>(
     "Choose Product Type..."
   );
@@ -51,7 +50,7 @@ import ProductProvider, {
   }, [productName, productPrice, selectedProductType]);
 
   const validatePrice = () => {
-    // console.log("Inside validate Price",priceNumber,selectedProductType);
+    console.log("Inside validate Price",priceNumber);
     if (selectedProductType == "Peripheral" && priceNumber < 0) {
       Alert.alert("Error", "Please enter Price > 0 dollars", [
         {
@@ -62,7 +61,7 @@ import ProductProvider, {
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
     }
-    if (
+    else if (
       selectedProductType == "Integrated" &&
       (priceNumber > 2600 || priceNumber < 1000)
     ) {
@@ -75,18 +74,19 @@ import ProductProvider, {
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
     }
+    else{
+    saveProducts(priceNumber);
+    }
 
     // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
   };
 
-  const saveProducts = () => {
+  const saveProducts = (priceNumber:number) => {
     
-    console.log("Inside Save funstion");
-        setProductPriceAmount(priceNumber);
     const newAddedProduct : IProducts = {
           id: Math.random(), 
           productName: productName,
-          productPrice: productPriceAmount,
+          productPrice: priceNumber,
           productType: selectedProductType,
 }
         setProductsAdded(newAddedProduct);
@@ -165,7 +165,7 @@ import ProductProvider, {
           disabled={saveDisabled}
           onPress={() => {
             validatePrice();
-            saveProducts();
+            //saveProducts();
           }}
         ></Button>
         <Feather
