@@ -17,24 +17,25 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import ErrorMessage from "../components/ErrorMessage";
 import { tokens } from "../helpers/translations/appStrings";
 import { translate } from "../helpers/translations/translationConfig";
+import { ProductContext } from "../context/ProductContext"; 
 import ProductProvider, {
+  IProductContextType,
   IProducts,
-  ProductContext,
 } from "../context/ProductContext";
 
-const CreateProductScreen: React.FC<
-  NativeStackScreenProps<StackScreens, "CreateProductScreen">
-> = props => {
+  
+  const CreateProductScreen: React.FC<NativeStackScreenProps<StackScreens, "CreateProductScreen">> = props => {
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
   const priceNumber: number = parseFloat(productPrice);
+  const [productPriceAmount,setProductPriceAmount] = useState<number>(priceNumber);
   const [selectedProductType, setSelectedProductType] = useState<string>(
     "Choose Product Type..."
   );
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [saveDisabled, setSaveDisabled] = useState(false);
 
-  const [productsList, setProductsList] = React.useState<IProducts[]>([]);
+  const [productsAdded, setProductsAdded] = React.useState<IProducts>();
   const appContext = React.useContext(ProductContext);
 
   const setModalData = (option: string) => {
@@ -79,20 +80,24 @@ const CreateProductScreen: React.FC<
   };
 
   const saveProducts = () => {
-    //appContext?.addProduct(productName,priceNumber,selectedProductType);
-
-    appContext?.productsList?.map(
-      (product, i) => (
-        (product.productName = productName),
-        (product.productPrice = priceNumber),
-        (product.productType = selectedProductType)
-
-        //setProductsList([...productsList,setProductsList])
-      )
-    );
-
-    // appContext?.saveProduct(productsList)
+    
+    console.log("Inside Save funstion");
+        setProductPriceAmount(priceNumber);
+    const newAddedProduct : IProducts = {
+          id: Math.random(), 
+          productName: productName,
+          productPrice: productPriceAmount,
+          productType: selectedProductType,
+}
+        setProductsAdded(newAddedProduct);
+        appContext?.saveProduct(newAddedProduct);
+       
+        console.log("Productslist in after save in create screen:",newAddedProduct.id,newAddedProduct.productName,newAddedProduct.productPrice,newAddedProduct.productType);
+        
+        props.navigation.goBack();
+    
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -169,12 +174,6 @@ const CreateProductScreen: React.FC<
           size={22}
           color={saveDisabled ? "black" : "blue"}
         />
-        {/*  <MaterialIcons
-          style={styles.btwSaveIcon}
-          name="file-download"
-          size={30}
-          color={saveDisabled ? "grey" : "blue"}
-        /> */}
       </View>
       <View>
         <Button
