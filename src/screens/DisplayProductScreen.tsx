@@ -16,6 +16,8 @@ import { FAB } from "react-native-paper";
 import ProductProvider, { ProductContext } from "../context/ProductContext";
 import { StackScreens } from "../helpers/types";
 import { Feather } from "@expo/vector-icons";
+import { translate } from "../helpers/translations/translationConfig";
+import { tokens } from "../helpers/translations/appStrings";
 
 const DisplayProductScreen: React.FC<
   NativeStackScreenProps<StackScreens, "DisplayProductScreen">
@@ -25,21 +27,15 @@ const DisplayProductScreen: React.FC<
   return (
     <>
       <View>
-        <View>
-          <Text style={styles.title}>Product Lists</Text>
+      <View>
+          <Text style={styles.title}>{translate(tokens.screens.DisplayProductScreen.mainText)}</Text>
         </View>
         <View style={styles.titlerow}>
-          <Text style={styles.prodName}>Name</Text>
-          <Text style={styles.prodType}>Type</Text>
-          <Text style={styles.prodPrice}>Price</Text>
+          <Text style={styles.prodName}>{translate(tokens.screens.DisplayProductScreen.productNameHeader)}</Text>
+          <Text style={styles.prodType}>{translate(tokens.screens.DisplayProductScreen.productTypeHeader)}</Text>
+          <Text style={styles.prodPrice}>{translate(tokens.screens.DisplayProductScreen.productPriceHeader)}</Text>
         </View>
-        {/* <Text>
-          {appContext?.productsList?.map((products, index) => (
-            <>
-              <Text key={index}>{products.productName},{products.productPrice},{products.productType}</Text>
-            </>
-          ))}
-        </Text> */}
+        
 
         <FlatList
           data={appContext?.productsList}
@@ -136,17 +132,19 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 20,
+    margin:10
   },
   productType: {
     fontSize: 20,
-    marginLeft: 100,
+    margin: 10,
   },
   productPrice: {
     fontSize: 20,
-    marginLeft: 80,
+    margin: 10,
   },
   icon: {
     fontSize: 24,
+    margin:10,
     paddingLeft: 0,
   },
   title: {
