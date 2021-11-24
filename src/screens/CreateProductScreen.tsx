@@ -99,6 +99,7 @@ import ProductProvider, {
           productPrice: priceNumber,
           productType: selectedProductType,
 }
+console.log("productfound pass",appContext?.checkProduct(productName))
        if(appContext?.checkProduct(productName)==true)
         {
         setProductsAdded(newAddedProduct);
