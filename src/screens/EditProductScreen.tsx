@@ -35,8 +35,8 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   const [selectedProductType, setSelectedProductType] = useState<string>(params.selectedProduct.productType);
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [saveDisabled, setSaveDisabled] = useState(false);
-
-  const [productsAdded, setProductsAdded] = React.useState<IProducts>();
+  const [productId,setProductId] = useState<number>(params.selectedProduct.id);
+  
 
   const setModalData = (option: string) => {
     setSelectedProductType(option);
@@ -54,7 +54,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   const validatePrice = () => {
     console.log("Inside validate Price",priceNumber);
     if (selectedProductType == "Peripheral" && priceNumber < 0) {
-      Alert.alert("Error", "Please enter Price > 0 dollars", [
+      Alert.alert("Error", "Peripheral Products Price should be > 0 dollars", [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
@@ -67,7 +67,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
       selectedProductType == "Integrated" &&
       (priceNumber > 2600 || priceNumber < 1000)
     ) {
-      Alert.alert("Error", "Please enter Price between 1000 and 2600 dollars", [
+      Alert.alert("Error", "Integrated Products Price should be between 1000 and 2600 dollars", [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
@@ -83,15 +83,15 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   };
 
 
-  const updateProduct = (priceNumber:number) => {
-    
-    console.log("productfound pass",appContext?.checkProduct(productName))
-       if(appContext?.checkProduct(productName)==true)
+  const updateProduct = (priceNumber:number) => 
+  {
+    console.log("productfound pass",appContext?.checkProduct(productName,productId))
+       if(appContext?.checkProduct(productName,params.selectedProduct.id)==true)
         {
           appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
           props.navigation.goBack();
         }
-    
+      
   }
 
   return (
@@ -106,7 +106,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
           )}
           style={styles.inputStyle}
           defaultValue={params.selectedProduct.productName}
-          onChangeText={text => setProductName(text)}
+          onChangeText={(text) => setProductName(text)}
         />
         <MaterialIcons style={styles.icon} name="add-to-queue" size={30} />
       </View>

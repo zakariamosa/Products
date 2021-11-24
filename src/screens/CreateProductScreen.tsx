@@ -53,8 +53,8 @@ import ProductProvider, {
 
   const validatePrice = () => {
     console.log("Inside validate Price",priceNumber);
-    if (selectedProductType == "Peripheral" && priceNumber < 0) {
-      Alert.alert("Error", "Please enter Price > 0 dollars", [
+    if (selectedProductType == "Peripheral" && priceNumber <= 0) {
+      Alert.alert("Error", "Peripheral Products Price should be > 0 dollars", [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
@@ -67,7 +67,7 @@ import ProductProvider, {
       selectedProductType == "Integrated" &&
       (priceNumber > 2600 || priceNumber < 1000)
     ) {
-      Alert.alert("Error", "Please enter Price between 1000 and 2600 dollars", [
+      Alert.alert("Error", "Integrated Producrs Price should be between 1000 and 2600 dollars", [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
@@ -90,8 +90,8 @@ import ProductProvider, {
           productPrice: priceNumber,
           productType: selectedProductType,
 }
-console.log("productfound pass",appContext?.checkProduct(productName))
-       if(appContext?.checkProduct(productName)==true)
+console.log("productfound pass",appContext?.checkProduct(productName,0))
+       if(appContext?.checkProduct(productName,0)==true)
         {
         setProductsAdded(newAddedProduct);
         appContext?.saveProduct(newAddedProduct);
