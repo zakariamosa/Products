@@ -151,8 +151,11 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
+    width:'100%',
+    alignSelf:'center',
     backgroundColor: "#8a2be2",
+    
   },
   prodName: {
     fontSize: 24,
