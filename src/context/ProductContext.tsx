@@ -42,21 +42,19 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
       } 
 
     const checkProduct = (productName:string)=>{
-        productsList.filter((products: IProducts) => {
-          console.log("Products element array:",products.productName);
-          if (products.productName == productName) 
+      let theproductexistsbeforeinthelist=true;
+        let productfound = productsList.find(product => product.productName===productName)
+          console.log("productfound", productfound);
+          if (productfound===undefined) 
           {
           
-            setIsProductValidated(true);
+            theproductexistsbeforeinthelist=false;
             //console.log("duplicate product");
             
           }
-          else{
-            setIsProductValidated(false);
-          }
-        })
+        
 
-        if(isProductValidated == true)
+        if(theproductexistsbeforeinthelist == true)
         {
           console.log("IsProductValidated in if:",isProductValidated);
           Alert.alert("Error", "Duplicate Product Values", [
