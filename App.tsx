@@ -33,6 +33,17 @@ export const MainNavigator: React.FC = () => {
         <Stack.Screen
           name="WeByte"
           component={DisplayProductScreen}
+          options={{
+            title: 'WeByte',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',              
+            },
+          }}
         />
         <Stack.Screen
           name="EditProduct"
