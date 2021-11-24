@@ -53,7 +53,7 @@ import ProductProvider, {
 
   const validatePrice = () => {
     console.log("Inside validate Price",priceNumber);
-    if (selectedProductType == "Peripheral" && priceNumber < 0) {
+    if (selectedProductType == "Peripheral" && priceNumber <= 0) {
       Alert.alert("Error", "Peripheral Products Price should be > 0 dollars", [
         {
           text: "Cancel",

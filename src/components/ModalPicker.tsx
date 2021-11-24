@@ -45,9 +45,9 @@ const ModalPicker: React.FC<IModalPicker> = props => {
       }}
       style={styles.container}
     >
-      <View style={[styles.modal, { width: WIDTH - 20, height: HEIGHT / 5.5 }]}>
+      <View style={[styles.modal, { width: WIDTH - 20, height: HEIGHT / 4.5 }]}>
         <Text style={styles.text}>Product Type</Text>
-        <ScrollView>{option}</ScrollView>
+        {option}
         <Button style={styles.button} title="Cancel"></Button>
       </View>
     </TouchableOpacity>
