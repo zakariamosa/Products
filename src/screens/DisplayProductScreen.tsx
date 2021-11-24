@@ -40,6 +40,7 @@ const DisplayProductScreen: React.FC<
         <FlatList
           data={appContext?.productsList}
           keyExtractor={product => product.productName}
+          scrollEnabled={true}
           renderItem={({ item, index }) => {
             return (
               <TouchableOpacity
@@ -53,7 +54,7 @@ const DisplayProductScreen: React.FC<
                 <View style={styles.row}>
                   <Text style={styles.productName}>{item.productName}</Text>
                   <Text style={styles.productType}>{item.productType}</Text>
-                  <Text style={styles.productPrice}>{item.productPrice}</Text>
+                  <Text style={styles.productPrice}>${item.productPrice}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       Alert.alert(
