@@ -23,7 +23,7 @@ import ProductProvider, {
 } from "../context/ProductContext";
 
 const CreateProductScreen: React.FC<
-  NativeStackScreenProps<StackScreens, "CreateProductScreen">
+  NativeStackScreenProps<StackScreens, "CreateProduct">
 > = props => {
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
@@ -187,7 +187,7 @@ const CreateProductScreen: React.FC<
           color="white"
           style={styles.btnStyleCancel}
           onPress={() => {
-            props.navigation.navigate("DisplayProductScreen");
+            props.navigation.navigate("WeByte");
           }}
         ></Button>
         <Foundation
@@ -208,13 +208,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
   headerStyle: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 18,
-    marginTop: 0,
+    marginTop: 10,
     width: 200,
   },
   btnStyleSave: {

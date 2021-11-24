@@ -16,9 +16,11 @@ import { FAB } from "react-native-paper";
 import ProductProvider, { ProductContext } from "../context/ProductContext";
 import { StackScreens } from "../helpers/types";
 import { Feather } from "@expo/vector-icons";
+import { translate } from "../helpers/translations/translationConfig";
+import { tokens } from "../helpers/translations/appStrings";
 
 const DisplayProductScreen: React.FC<
-  NativeStackScreenProps<StackScreens, "DisplayProductScreen">
+  NativeStackScreenProps<StackScreens, "WeByte">
 > = props => {
   //const { productsList,saveProduct,updateProduct } = useContext(ProductContext);
   const appContext = useContext(ProductContext);
@@ -26,30 +28,32 @@ const DisplayProductScreen: React.FC<
     <>
       <View>
         <View>
-          <Text style={styles.title}>Product Lists</Text>
+          <Text style={styles.title}>
+            {translate(tokens.screens.DisplayProductScreen.mainText)}
+          </Text>
         </View>
         <View style={styles.titlerow}>
-          <Text style={styles.prodName}>Name</Text>
-          <Text style={styles.prodType}>Type</Text>
-          <Text style={styles.prodPrice}>Price</Text>
+          <Text style={styles.prodName}>
+            {translate(tokens.screens.DisplayProductScreen.productNameHeader)}
+          </Text>
+          <Text style={styles.prodType}>
+            {translate(tokens.screens.DisplayProductScreen.productTypeHeader)}
+          </Text>
+          <Text style={styles.prodPrice}>
+            {translate(tokens.screens.DisplayProductScreen.productPriceHeader)}
+          </Text>
         </View>
-        {/* <Text>
-          {appContext?.productsList?.map((products, index) => (
-            <>
-              <Text key={index}>{products.productName},{products.productPrice},{products.productType}</Text>
-            </>
-          ))}
-        </Text> */}
 
         <FlatList
           data={appContext?.productsList}
           keyExtractor={product => product.productName}
+          scrollEnabled={true}
           renderItem={({ item, index }) => {
             return (
               <TouchableOpacity
                 key={index}
                 onPress={() =>
-                  props.navigation.navigate("EditProductScreen", {
+                  props.navigation.navigate("EditProduct", {
                     selectedProduct: item,
                   })
                 }
@@ -57,7 +61,7 @@ const DisplayProductScreen: React.FC<
                 <View style={styles.row}>
                   <Text style={styles.productName}>{item.productName}</Text>
                   <Text style={styles.productType}>{item.productType}</Text>
-                  <Text style={styles.productPrice}>{item.productPrice}</Text>
+                  <Text style={styles.productPrice}>${item.productPrice}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       Alert.alert(
@@ -90,7 +94,7 @@ const DisplayProductScreen: React.FC<
         style={styles.fab}
         icon="plus"
         onPress={() => {
-          props.navigation.navigate("CreateProductScreen");
+          props.navigation.navigate("CreateProduct");
         }}
       />
     </>
@@ -156,7 +160,9 @@ const styles = StyleSheet.create({
     marginLeft: 380,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
+    width: "100%",
+    alignSelf: "center",
     backgroundColor: "#8a2be2",
   },
   prodName: {
