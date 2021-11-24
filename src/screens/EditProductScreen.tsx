@@ -35,6 +35,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   const [selectedProductType, setSelectedProductType] = useState<string>(params.selectedProduct.productType);
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [saveDisabled, setSaveDisabled] = useState(false);
+  const [productId,setProductId] = useState<number>(params.selectedProduct.id);
   
 
   const setModalData = (option: string) => {
@@ -84,7 +85,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
 
   const updateProduct = (priceNumber:number) => 
   {
-    console.log("productfound pass",appContext?.checkProduct(productName,params.selectedProduct.id))
+    console.log("productfound pass",appContext?.checkProduct(productName,productId))
        if(appContext?.checkProduct(productName,params.selectedProduct.id)==true)
         {
           appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
