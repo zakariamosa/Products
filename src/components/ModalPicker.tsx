@@ -45,7 +45,7 @@ const ModalPicker: React.FC<IModalPicker> = props => {
       }}
       style={styles.container}
     >
-      <View style={[styles.modal, { width: WIDTH - 20, height: HEIGHT / 4.3 }]}>
+      <View style={[styles.modal, { width: WIDTH - 20, height: HEIGHT / 4.2 }]}>
         <Text style={styles.text}>Product Type</Text>
         {option}
         <Button style={styles.button} title="Cancel"></Button>
@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
     width: 100,
     fontWeight: "bold",
     marginLeft: 260,
-    marginTop: 20,
+    marginTop: 10,
   },
 });

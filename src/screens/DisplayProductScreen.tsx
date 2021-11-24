@@ -118,13 +118,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#8a2be2",
     borderRadius: 100,
   },
-  textStyle: {
-    fontSize: 25,
-  },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 20,
+    paddingVertical: 25,
     paddingHorizontal: 10,
     borderColor: "gray",
   },
@@ -135,19 +132,28 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   productName: {
-    fontSize: 20,
+    paddingTop: 20,
+    position: "absolute",
+    fontSize: 22,
   },
   productType: {
-    fontSize: 20,
-    marginLeft: 100,
+    paddingTop: 20,
+    position: "absolute",
+    fontSize: 22,
+    marginLeft: 150,
   },
   productPrice: {
-    fontSize: 20,
-    marginLeft: 80,
+    paddingTop: 20,
+    position: "absolute",
+    fontSize: 22,
+    marginLeft: 300,
   },
   icon: {
-    fontSize: 24,
-    paddingLeft: 0,
+    paddingTop: 20,
+    position: "absolute",
+    fontSize: 22,
+    marginTop: -25,
+    marginLeft: 380,
   },
   title: {
     fontSize: 28,
@@ -158,10 +164,9 @@ const styles = StyleSheet.create({
   },
   prodType: {
     fontSize: 24,
-    marginRight: 30,
   },
   prodPrice: {
     fontSize: 24,
-    marginRight: 30,
+    marginRight: 60,
   },
 });
