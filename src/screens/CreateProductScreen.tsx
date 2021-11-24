@@ -14,7 +14,6 @@ import ModalPicker from "../components/ModalPicker";
 import { TextInput, Button } from "@react-native-material/core";
 import { StackScreens } from "../helpers/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import ErrorMessage from "../components/ErrorMessage";
 import { tokens } from "../helpers/translations/appStrings";
 import { translate } from "../helpers/translations/translationConfig";
 import { ProductContext } from "../context/ProductContext"; 
@@ -78,17 +77,9 @@ import ProductProvider, {
       ]);
     }
     else{
-      
-      
-      //itemAdded.concat([...itemAdded,productName]);
-      
     saveProducts(priceNumber);
     
   }
-
-  
-
-    // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
   };
 
   const saveProducts = (priceNumber:number) => {
@@ -107,8 +98,6 @@ import ProductProvider, {
         
         props.navigation.goBack();
         }
-        
-    
   }
 
 
