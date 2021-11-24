@@ -46,7 +46,16 @@ const DisplayProductScreen: React.FC<
                 <Text style={styles.title}>
                   {item.productName} - {item.productType} - {item.productPrice}
                 </Text>
-                <TouchableOpacity onPress={() => {appContext?.deleteProduct(item.id)}}>
+                <TouchableOpacity onPress={() => {
+                  Alert.alert("Warning", "Do you want to delete the product", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    { text: "OK", onPress: () => appContext?.deleteProduct(item.id) },
+                  ]);
+                  }}>
                   <Feather style={styles.icon} name="trash" />
                 </TouchableOpacity>
               </View>
