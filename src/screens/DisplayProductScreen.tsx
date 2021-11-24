@@ -20,7 +20,7 @@ import { translate } from "../helpers/translations/translationConfig";
 import { tokens } from "../helpers/translations/appStrings";
 
 const DisplayProductScreen: React.FC<
-  NativeStackScreenProps<StackScreens, "DisplayProductScreen">
+  NativeStackScreenProps<StackScreens, "WeByte">
 > = props => {
   //const { productsList,saveProduct,updateProduct } = useContext(ProductContext);
   const appContext = useContext(ProductContext);
@@ -46,7 +46,7 @@ const DisplayProductScreen: React.FC<
               <TouchableOpacity
                 key={index}
                 onPress={() =>
-                  props.navigation.navigate("EditProductScreen", {
+                  props.navigation.navigate("EditProduct", {
                     selectedProduct: item,
                   })
                 }
@@ -87,7 +87,7 @@ const DisplayProductScreen: React.FC<
         style={styles.fab}
         icon="plus"
         onPress={() => {
-          props.navigation.navigate("CreateProductScreen");
+          props.navigation.navigate("CreateProduct");
         }}
       />
     </>
@@ -141,11 +141,13 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: 20,
-    margin: 10,
+    marginTop: 10,
+    marginRight:5
   },
   icon: {
     fontSize: 24,
-    margin:10,
+    marginTop:10,
+    marginRight:2,
     paddingLeft: 0,
   },
   title: {

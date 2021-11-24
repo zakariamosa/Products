@@ -24,7 +24,7 @@ import ProductProvider, {
 } from "../context/ProductContext";
 
 interface IProps
-  extends NativeStackScreenProps<StackScreens, "EditProductScreen"> {}
+  extends NativeStackScreenProps<StackScreens, "EditProduct"> {}
 const EditProductScreen: React.FC<IProps> = props => {
   const params = props.route.params;
   console.log("selected product id:", params?.selectedProduct);
@@ -184,7 +184,7 @@ const EditProductScreen: React.FC<IProps> = props => {
           color="white"
           style={styles.btnStyleCancel}
           onPress={() => {
-            props.navigation.navigate("DisplayProductScreen");
+            props.navigation.navigate("WeByte");
           }}
         ></Button>
         <Foundation
