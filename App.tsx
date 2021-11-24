@@ -9,6 +9,7 @@ import { setI18nConfig } from "./src/helpers/translations/translationConfig";
 import { tokens } from "./src/helpers/translations/appStrings";
 import { translate } from "./src/helpers/translations/translationConfig";
 import ProductProvider from "./src/context/ProductContext";
+import EditProductScreen from "./src/screens/EditProductScreen";
 
 export default function App() {
   return (
@@ -32,6 +33,10 @@ export const MainNavigator: React.FC = () => {
         <Stack.Screen
           name="DisplayProductScreen"
           component={DisplayProductScreen}
+        />
+        <Stack.Screen
+          name="EditProductScreen"
+          component={EditProductScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

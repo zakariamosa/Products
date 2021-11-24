@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   SafeAreaView,
   TouchableOpacity,
+  Text,
   Modal,
-  Alert,
+  Alert
 } from "react-native";
+import { StackScreens } from "../helpers/types";
+import { TextInput, Button } from "@react-native-material/core";
 import { MaterialIcons, Foundation, Feather } from "@expo/vector-icons";
 import useToggleModalVisible from "../customhooks/useToggleModalVisible";
 import ModalPicker from "../components/ModalPicker";
-import { TextInput, Button } from "@react-native-material/core";
-import { StackScreens } from "../helpers/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import ErrorMessage from "../components/ErrorMessage";
 import { tokens } from "../helpers/translations/appStrings";
 import { translate } from "../helpers/translations/translationConfig";
 import { ProductContext } from "../context/ProductContext"; 
@@ -23,34 +22,27 @@ import ProductProvider, {
   IProducts,
 } from "../context/ProductContext";
 
-  
-  const CreateProductScreen: React.FC<NativeStackScreenProps<StackScreens, "CreateProductScreen">> = (props) => {
+interface IProps
+  extends NativeStackScreenProps<StackScreens, "EditProductScreen"> {}
+const EditProductScreen: React.FC<IProps> = (props) => {
 
-  const [productName, setProductName] = useState<string>("");
-  const [productPrice, setProductPrice] = useState<string | "">("");
+    const params = props.route.params;
+    console.log("selected product id:",params?.selectedProduct);
+
+  const [productName, setProductName] = useState<string>(params.selectedProduct.productName);
+  const [productPrice, setProductPrice] = useState<string | "">(params.selectedProduct.productPrice.toString());
   let priceNumber: number = parseFloat(productPrice);
-  const [selectedProductType, setSelectedProductType] = useState<string>(
-    "Choose Product Type..."
-  );
+  const [selectedProductType, setSelectedProductType] = useState<string>(params.selectedProduct.productType);
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [saveDisabled, setSaveDisabled] = useState(false);
 
   const [productsAdded, setProductsAdded] = React.useState<IProducts>();
-  
-  const appContext = React.useContext(ProductContext);
 
   const setModalData = (option: string) => {
     setSelectedProductType(option);
   };
 
-  useEffect(() => {
-    setSaveDisabled(
-      productName.length === 0 ||
-        productPrice.length === 0 ||
-        selectedProductType == "Choose Product Type..."
-    );
-  }, [productName, productPrice, selectedProductType]);
-
+  const appContext = React.useContext(ProductContext);
 
   const validatePrice = () => {
     console.log("Inside validate Price",priceNumber);
@@ -78,44 +70,40 @@ import ProductProvider, {
       ]);
     }
     else{
-      
-      
-      //itemAdded.concat([...itemAdded,productName]);
-      
-    saveProducts(priceNumber);
+    updateProduct(priceNumber);
     
   }
-
-  
-
     // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
   };
 
-  const saveProducts = (priceNumber:number) => {
+
+  const updateProduct = (priceNumber:number) => {
     
-    const newAddedProduct : IProducts = {
-          id: Math.random(), 
+    /* const newAddedDetails: IProducts = {
+            id: params.selectedProduct.id,
           productName: productName,
           productPrice: priceNumber,
           productType: selectedProductType,
-}
-       if(appContext?.checkProduct(productName)==true)
+} 
+       if(appContext?.checkProduct(newAddedDetails))
         {
-        setProductsAdded(newAddedProduct);
-        appContext?.saveProduct(newAddedProduct);
-        console.log("Productslist in after save in create screen:",newAddedProduct.id,newAddedProduct.productName,newAddedProduct.productPrice,newAddedProduct.productType);
+        setProductsAdded(newAddedDetails);
+        appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
+        console.log("Productslist in after save in create screen:",newAddedDetails.id,newAddedDetails.productName,newAddedDetails.productPrice,newAddedDetails.productType);
         
         props.navigation.goBack();
-        }
+        }*/
         
+        appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
+        props.navigation.goBack();
+        //console.log("Productslist in after save in create screen:",newAddedDetails.id,newAddedDetails.productName,newAddedDetails.productPrice,newAddedDetails.productType);
     
   }
-
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerStyle}>
-        {translate(tokens.screens.AddProductScreen.mainText)}
+         {translate(tokens.screens.EditProductScreen.mainText)} 
       </Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -123,7 +111,7 @@ import ProductProvider, {
             tokens.screens.AddProductScreen.productNameLabelText
           )}
           style={styles.inputStyle}
-          defaultValue={productName}
+          defaultValue={params.selectedProduct.productName}
           onChangeText={text => setProductName(text)}
         />
         <MaterialIcons style={styles.icon} name="add-to-queue" size={30} />
@@ -134,22 +122,21 @@ import ProductProvider, {
             tokens.screens.AddProductScreen.productPriceLabelText
           )}
           style={styles.inputStyle}
-          // defaultValue={productPrice}
+          defaultValue={params.selectedProduct.productPrice.toString()}
           keyboardType="decimal-pad"
           onChangeText={text => setProductPrice(text)}
         />
         <MaterialIcons style={styles.icon} name="money" size={30} />
       </View>
       <View>
-        <Text>
+        <Text style={styles.productTypeLabel}>
           {translate(tokens.screens.AddProductScreen.productTypeLabelText)}
         </Text>
       </View>
       <View>
         <TouchableOpacity
           style={styles.pickerStyle}
-          onPress={() => toggleModalVisible(true)}
-        >
+          onPress={() => toggleModalVisible(true)}>
           <Text style={styles.pickerText}>{selectedProductType}</Text>
           <MaterialIcons
             style={styles.dropDownStyle}
@@ -178,14 +165,13 @@ import ProductProvider, {
           disabled={saveDisabled}
           onPress={() => {
             validatePrice();
-            //saveProducts();
           }}
         ></Button>
         <Feather
           style={styles.btwSaveIcon}
           name="download"
           size={22}
-          color={saveDisabled ? "black" : "blue"}
+          color={saveDisabled ? "black" : "white"}
         />
       </View>
       <View>
@@ -207,22 +193,27 @@ import ProductProvider, {
     </SafeAreaView>
   );
 };
-
-export default CreateProductScreen;
+export default EditProductScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
   headerStyle: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 18,
-    marginTop: 0,
-    width: 200,
+    padding: 20,
+  },
+  inputStyle: {
+    backgroundColor: "white",
+    fontSize: 25,
+    width: "80%",
+    height: 50,
+    borderRadius: 15,
+    marginTop: 30,
   },
   btnStyleSave: {
     flexDirection: "row",
@@ -230,34 +221,24 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 10,
-    marginTop: 10,
-    marginLeft: -120,
+    marginTop: 20,
     width: 100,
-  },
-  btnStyleCancel: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignSelf: "center",
-    backgroundColor: "#8a2be2",
-    borderWidth: 1,
-    borderRadius: 10,
-    marginTop: -38,
-    marginLeft: 90,
-    width: 105,
-  },
-  inputStyle: {
-    flex: 1,
-    backgroundColor: "white",
-    fontSize: 25,
-    width: "80%",
-    height: 50,
-    margin: 20,
-    borderRadius: 15,
+    marginLeft: -150,
   },
   inputContainer: {
     flexDirection: "row",
     borderColor: "#000",
     paddingBottom: 10,
+  },
+  modalView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalDesign: {
+    borderWidth: 2,
+    width: 350,
+    height: 200,
   },
   pickerStyle: {
     paddingHorizontal: 10,
@@ -283,15 +264,27 @@ const styles = StyleSheet.create({
   },
   btwSaveIcon: {
     position: "absolute",
-    right: 15,
-    top: 14,
+    right: 30,
+    top: 25,
   },
   btwCancelIcon: {
     position: "absolute",
     right: 7,
     top: -31,
   },
-  textStyle: {
-    fontSize: 20,
+  btnStyleCancel: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    backgroundColor: "#8a2be2",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: -38,
+    marginLeft: 90,
+    width: 105,
+  },
+  productTypeLabel: {
+    marginTop: 15,
+    fontSize: 18,
   },
 });
