@@ -59,9 +59,9 @@ const DisplayProductScreen: React.FC<
                 }
               >
                 <View style={styles.row}>
-                  <Text style={styles.productName}>{item.productName}</Text>
-                  <Text style={styles.productType}>{item.productType}</Text>
-                  <Text style={styles.productPrice}>${item.productPrice}</Text>
+                  <Text style={styles.titlemyrow}>{item.productName}</Text>
+                  <Text style={styles.titlemyrow}>{item.productType}</Text>
+                  <Text style={styles.titlemyrow}>${item.productPrice}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       Alert.alert(
@@ -153,17 +153,21 @@ const styles = StyleSheet.create({
     marginLeft: 300,
   },
   icon: {
-    paddingTop: 20,
-    position: "absolute",
-    fontSize: 22,
-    marginTop: -25,
-    marginLeft: 380,
+    //paddingTop: 20,
+    //position: "absolute",
+    //fontSize: 22,
+    //marginTop: -25,
+    //marginLeft: 380,
+    fontSize: 24,
   },
   title: {
     fontSize: 26,
     width: "100%",
     alignSelf: "center",
     backgroundColor: "#8a2be2",
+  },
+  titlemyrow: {
+    fontSize: 18,
   },
   prodName: {
     fontSize: 24,
