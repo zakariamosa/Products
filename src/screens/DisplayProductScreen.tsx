@@ -15,7 +15,7 @@ import {
 import { FAB } from "react-native-paper";
 import ProductProvider, { ProductContext } from "../context/ProductContext";
 import { StackScreens } from "../helpers/types";
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
 
 const DisplayProductScreen: React.FC<
   NativeStackScreenProps<StackScreens, "DisplayProductScreen">
@@ -25,6 +25,14 @@ const DisplayProductScreen: React.FC<
   return (
     <>
       <View>
+        <View>
+          <Text style={styles.title}>Product Lists</Text>
+        </View>
+        <View style={styles.titlerow}>
+          <Text style={styles.prodName}>Name</Text>
+          <Text style={styles.prodType}>Type</Text>
+          <Text style={styles.prodPrice}>Price</Text>
+        </View>
         {/* <Text>
           {appContext?.productsList?.map((products, index) => (
             <>
@@ -33,39 +41,49 @@ const DisplayProductScreen: React.FC<
           ))}
         </Text> */}
 
-
         <FlatList
-        data={appContext?.productsList}
-        keyExtractor={(product) => product.productName}
-        renderItem={({ item,index }) => {
-          return (
-            <TouchableOpacity key={index}
-              onPress={() => props.navigation.navigate('EditProductScreen',{selectedProduct:item})}
-            >
-              <View style={styles.row}>
-                <Text style={styles.title}>
-                  {item.productName} - {item.productType} - {item.productPrice}
-                </Text>
-                <TouchableOpacity onPress={() => {
-                  Alert.alert("Warning", "Do you want to delete the product", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    { text: "OK", onPress: () => appContext?.deleteProduct(item.id) },
-                  ]);
-                  }}>
-                  <Feather style={styles.icon} name="trash" />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-
-
+          data={appContext?.productsList}
+          keyExtractor={product => product.productName}
+          renderItem={({ item, index }) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  props.navigation.navigate("EditProductScreen", {
+                    selectedProduct: item,
+                  })
+                }
+              >
+                <View style={styles.row}>
+                  <Text style={styles.productName}>{item.productName}</Text>
+                  <Text style={styles.productType}>{item.productType}</Text>
+                  <Text style={styles.productPrice}>{item.productPrice}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Alert.alert(
+                        "Warning",
+                        "Do you want to delete the product",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel",
+                          },
+                          {
+                            text: "OK",
+                            onPress: () => appContext?.deleteProduct(item.id),
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Feather style={styles.icon} name="trash" />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
       </View>
 
       <FAB
@@ -104,17 +122,46 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 20,
     paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
   },
-  title: {
-    fontSize: 18,
+  titlerow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    paddingTop: 10,
+  },
+  productName: {
+    fontSize: 20,
+  },
+  productType: {
+    fontSize: 20,
+    marginLeft: 100,
+  },
+  productPrice: {
+    fontSize: 20,
+    marginLeft: 80,
   },
   icon: {
     fontSize: 24,
+    paddingLeft: 0,
+  },
+  title: {
+    fontSize: 28,
+    backgroundColor: "#8a2be2",
+  },
+  prodName: {
+    fontSize: 24,
+  },
+  prodType: {
+    fontSize: 24,
+    marginRight: 30,
+  },
+  prodPrice: {
+    fontSize: 24,
+    marginRight: 30,
   },
 });
