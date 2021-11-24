@@ -6,7 +6,7 @@ import { Alert } from "react-native";
     productName: string
     productPrice: number
     productType: string
-    //statusAvailable:boolean
+    
   } 
 
      export interface IProductContextType  {
@@ -15,7 +15,7 @@ import { Alert } from "react-native";
     editProduct: (id: number,productName:string,productPrice:number,productType:string) => void;
     checkProduct : (productName:string) => boolean;
     deleteProduct : (productId:number) => void;
-    isProductValidated:boolean;
+    
   }   
 
 
@@ -24,9 +24,7 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
 
  const ProductsProvider:React.FC = (props) => {
     const [productsList,setProductsList] = useState<IProducts[]>([])
-    const [isProductValidated,setIsProductValidated] = useState(false)
     
-
      const saveProduct = (product:IProducts) => {
         
     console.log("Inside saveContext product object value: ",product.id,product.productName,product.productPrice,product.productType)
@@ -35,40 +33,36 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
           productName: product.productName,
           productPrice: product.productPrice,
           productType: product.productType,
-          //statusAvailable:product.statusAvailable
+          
         } 
         setProductsList((productsList) => [...productsList, newProduct]);
-        //setIsProductValidated(false)
+        
       } 
 
-    const checkProduct = (productName:string)=>{
-      let theproductexistsbeforeinthelist=true;
-        let productfound = productsList.find(product => product.productName===productName)
-          console.log("productfound", productfound);
-          if (productfound===undefined) 
+      const checkProduct = (productName:string)=>{
+        let theproductexistsbeforeinthelist=true;
+          let productfound = productsList.find(product => product.productName===productName)
+            console.log("productfound", productfound);
+            if (productfound===undefined) 
+            {
+              theproductexistsbeforeinthelist=false;
+            }
+  
+          if(theproductexistsbeforeinthelist == true)
           {
-          
-            theproductexistsbeforeinthelist=false;
-            //console.log("duplicate product");
             
+            Alert.alert("Error", "Duplicate Product Name", [
+              
+              { text: "OK", onPress: () => console.log("OK Pressed") },
+            ]);
+            return false
           }
-        
-
-        if(theproductexistsbeforeinthelist == true)
-        {
-          console.log("IsProductValidated in if:",isProductValidated);
-          Alert.alert("Error", "Duplicate Product Values", [
+  
+          else {
             
-            { text: "OK", onPress: () => console.log("OK Pressed") },
-          ]);
-          return false
+            return true
+          }
         }
-
-        else {
-          console.log("isProductValidated in else:",isProductValidated)
-          return true
-        }
-      }
       
     const editProduct = (id: number,productName:string,productPrice:number,productType:string) => {
       console.log("Inside Edit product in context");
@@ -104,7 +98,7 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
             editProduct,
             checkProduct,
             deleteProduct,
-            isProductValidated 
+             
         }}>
             {props.children}
         </ProductContext.Provider>

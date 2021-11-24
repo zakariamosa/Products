@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -44,6 +44,13 @@ const EditProductScreen: React.FC<IProps> = (props) => {
 
   const appContext = React.useContext(ProductContext);
 
+  useEffect(() => {
+    setSaveDisabled(
+      productName.length === 0 ||
+        productPrice.length === 0 
+    );
+  }, [productName, productPrice]);
+
   const validatePrice = () => {
     console.log("Inside validate Price",priceNumber);
     if (selectedProductType == "Peripheral" && priceNumber < 0) {
@@ -73,30 +80,17 @@ const EditProductScreen: React.FC<IProps> = (props) => {
     updateProduct(priceNumber);
     
   }
-    // <ErrorMessage setPriceValue={priceNumber} selectedProductType={selectedProductType} />
   };
 
 
   const updateProduct = (priceNumber:number) => {
     
-    /* const newAddedDetails: IProducts = {
-            id: params.selectedProduct.id,
-          productName: productName,
-          productPrice: priceNumber,
-          productType: selectedProductType,
-} 
-       if(appContext?.checkProduct(newAddedDetails))
+    console.log("productfound pass",appContext?.checkProduct(productName))
+       if(appContext?.checkProduct(productName)==true)
         {
-        setProductsAdded(newAddedDetails);
-        appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
-        console.log("Productslist in after save in create screen:",newAddedDetails.id,newAddedDetails.productName,newAddedDetails.productPrice,newAddedDetails.productType);
-        
-        props.navigation.goBack();
-        }*/
-        
-        appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
-        props.navigation.goBack();
-        //console.log("Productslist in after save in create screen:",newAddedDetails.id,newAddedDetails.productName,newAddedDetails.productPrice,newAddedDetails.productType);
+          appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
+          props.navigation.goBack();
+        }
     
   }
 
