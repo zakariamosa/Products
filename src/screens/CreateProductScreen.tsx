@@ -16,15 +16,15 @@ import { StackScreens } from "../helpers/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { tokens } from "../helpers/translations/appStrings";
 import { translate } from "../helpers/translations/translationConfig";
-import { ProductContext } from "../context/ProductContext"; 
+import { ProductContext } from "../context/ProductContext";
 import ProductProvider, {
   IProductContextType,
   IProducts,
 } from "../context/ProductContext";
 
-  
-  const CreateProductScreen: React.FC<NativeStackScreenProps<StackScreens, "CreateProductScreen">> = (props) => {
-
+const CreateProductScreen: React.FC<
+  NativeStackScreenProps<StackScreens, "CreateProductScreen">
+> = props => {
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | "">("");
   let priceNumber: number = parseFloat(productPrice);
@@ -35,7 +35,7 @@ import ProductProvider, {
   const [saveDisabled, setSaveDisabled] = useState(false);
 
   const [productsAdded, setProductsAdded] = React.useState<IProducts>();
-  
+
   const appContext = React.useContext(ProductContext);
 
   const setModalData = (option: string) => {
@@ -50,9 +50,8 @@ import ProductProvider, {
     );
   }, [productName, productPrice, selectedProductType]);
 
-
   const validatePrice = () => {
-    console.log("Inside validate Price",priceNumber);
+    console.log("Inside validate Price", priceNumber);
     if (selectedProductType == "Peripheral" && priceNumber <= 0) {
       Alert.alert("Error", "Peripheral Products Price should be > 0 dollars", [
         {
@@ -62,45 +61,49 @@ import ProductProvider, {
         },
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
-    }
-    else if (
+    } else if (
       selectedProductType == "Integrated" &&
       (priceNumber > 2600 || priceNumber < 1000)
     ) {
-      Alert.alert("Error", "Integrated Producrs Price should be between 1000 and 2600 dollars", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Alert.alert(
+        "Error",
+        "Integrated Producrs Price should be between 1000 and 2600 dollars",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]
+      );
+    } else {
+      saveProducts(priceNumber);
     }
-    else{
-    saveProducts(priceNumber);
-    
-  }
   };
 
-  const saveProducts = (priceNumber:number) => {
-    
-    const newAddedProduct : IProducts = {
-          id: Math.random(), 
-          productName: productName,
-          productPrice: priceNumber,
-          productType: selectedProductType,
-}
-console.log("productfound pass",appContext?.checkProduct(productName,0))
-       if(appContext?.checkProduct(productName,0)==true)
-        {
-        setProductsAdded(newAddedProduct);
-        appContext?.saveProduct(newAddedProduct);
-        console.log("Productslist in after save in create screen:",newAddedProduct.id,newAddedProduct.productName,newAddedProduct.productPrice,newAddedProduct.productType);
-        
-        props.navigation.goBack();
-        }
-  }
+  const saveProducts = (priceNumber: number) => {
+    const newAddedProduct: IProducts = {
+      id: Math.random(),
+      productName: productName,
+      productPrice: priceNumber,
+      productType: selectedProductType,
+    };
+    console.log("productfound pass", appContext?.checkProduct(productName, 0));
+    if (appContext?.checkProduct(productName, 0) == true) {
+      setProductsAdded(newAddedProduct);
+      appContext?.saveProduct(newAddedProduct);
+      console.log(
+        "Productslist in after save in create screen:",
+        newAddedProduct.id,
+        newAddedProduct.productName,
+        newAddedProduct.productPrice,
+        newAddedProduct.productType
+      );
 
+      props.navigation.goBack();
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -163,7 +166,7 @@ console.log("productfound pass",appContext?.checkProduct(productName,0))
       <View>
         <Button
           title={translate(tokens.screens.AddProductScreen.saveButtonText)}
-          color={saveDisabled ? "grey" : "#8a2be2"}
+          color={saveDisabled ? "grey" : "green"}
           style={styles.btnStyleSave}
           disabled={saveDisabled}
           onPress={() => {
@@ -175,7 +178,7 @@ console.log("productfound pass",appContext?.checkProduct(productName,0))
           style={styles.btwSaveIcon}
           name="download"
           size={22}
-          color={saveDisabled ? "black" : "blue"}
+          color={saveDisabled ? "black" : "white"}
         />
       </View>
       <View>
