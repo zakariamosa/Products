@@ -11,11 +11,16 @@ enum EditProductScreen{
     mainText = "editProduct-main-text",
 }
 
-
-
+enum DisplayProductScreen{
+    mainText = "displayProducts-main-text",
+    productNameHeader = "display-header-name",
+    productPriceHeader = "display-header-price",
+    productTypeHeader = "display-header-type"
+}
 export const tokens = {
     screens:{
         AddProductScreen:CreateProductScreen,
-        EditProductScreen:EditProductScreen
+        EditProductScreen:EditProductScreen,
+        DisplayProductScreen:DisplayProductScreen
     }
 }

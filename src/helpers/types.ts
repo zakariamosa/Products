@@ -1,7 +1,7 @@
 import { IProducts } from "../context/ProductContext";
 
 export type StackScreens = {
-    CreateProductScreen: undefined;
-    DisplayProductScreen: undefined;
-    EditProductScreen: {selectedProduct:IProducts};
+    CreateProduct: undefined;
+    WeByte: undefined;
+    EditProduct: {selectedProduct:IProducts};
   };

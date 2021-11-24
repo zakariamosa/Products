@@ -25,17 +25,29 @@ export const MainNavigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="DisplayProductScreen">
+      <Stack.Navigator initialRouteName="WeByte">
         <Stack.Screen
-          name="CreateProductScreen"
+          name="CreateProduct"
           component={CreateProductScreen}
         />
         <Stack.Screen
-          name="DisplayProductScreen"
+          name="WeByte"
           component={DisplayProductScreen}
+          options={{
+            title: 'WeByte',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',              
+
+            },
+          }}
         />
         <Stack.Screen
-          name="EditProductScreen"
+          name="EditProduct"
           component={EditProductScreen}
         />
       </Stack.Navigator>

@@ -7,36 +7,41 @@ import {
   TouchableOpacity,
   Text,
   Modal,
-  Alert
+  Alert,
+  TextInput,
 } from "react-native";
 import { StackScreens } from "../helpers/types";
-import { TextInput, Button } from "@react-native-material/core";
+import { Button } from "@react-native-material/core";
 import { MaterialIcons, Foundation, Feather } from "@expo/vector-icons";
 import useToggleModalVisible from "../customhooks/useToggleModalVisible";
 import ModalPicker from "../components/ModalPicker";
 import { tokens } from "../helpers/translations/appStrings";
 import { translate } from "../helpers/translations/translationConfig";
-import { ProductContext } from "../context/ProductContext"; 
+import { ProductContext } from "../context/ProductContext";
 import ProductProvider, {
   IProductContextType,
   IProducts,
 } from "../context/ProductContext";
 
 interface IProps
-  extends NativeStackScreenProps<StackScreens, "EditProductScreen"> {}
-const EditProductScreen: React.FC<IProps> = (props) => {
+  extends NativeStackScreenProps<StackScreens, "EditProduct"> {}
+const EditProductScreen: React.FC<IProps> = props => {
+  const params = props.route.params;
+  console.log("selected product id:", params?.selectedProduct);
 
-    const params = props.route.params;
-    console.log("selected product id:",params?.selectedProduct);
-
-  const [productName, setProductName] = useState<string>(params.selectedProduct.productName);
-  const [productPrice, setProductPrice] = useState<string | "">(params.selectedProduct.productPrice.toString());
+  const [productName, setProductName] = useState<string>(
+    params.selectedProduct.productName
+  );
+  const [productPrice, setProductPrice] = useState<string | "">(
+    params.selectedProduct.productPrice.toString()
+  );
   let priceNumber: number = parseFloat(productPrice);
-  const [selectedProductType, setSelectedProductType] = useState<string>(params.selectedProduct.productType);
+  const [selectedProductType, setSelectedProductType] = useState<string>(
+    params.selectedProduct.productType
+  );
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [saveDisabled, setSaveDisabled] = useState(false);
-  const [productId,setProductId] = useState<number>(params.selectedProduct.id);
-  
+  const [productId, setProductId] = useState<number>(params.selectedProduct.id);
 
   const setModalData = (option: string) => {
     setSelectedProductType(option);
@@ -45,14 +50,11 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   const appContext = React.useContext(ProductContext);
 
   useEffect(() => {
-    setSaveDisabled(
-      productName.length === 0 ||
-        productPrice.length === 0 
-    );
+    setSaveDisabled(productName.length === 0 || productPrice.length === 0);
   }, [productName, productPrice]);
 
   const validatePrice = () => {
-    console.log("Inside validate Price",priceNumber);
+    console.log("Inside validate Price", priceNumber);
     if (selectedProductType == "Peripheral" && priceNumber < 0) {
       Alert.alert("Error", "Peripheral Products Price should be > 0 dollars", [
         {
@@ -62,57 +64,64 @@ const EditProductScreen: React.FC<IProps> = (props) => {
         },
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
-    }
-    else if (
+    } else if (
       selectedProductType == "Integrated" &&
       (priceNumber > 2600 || priceNumber < 1000)
     ) {
-      Alert.alert("Error", "Integrated Products Price should be between 1000 and 2600 dollars", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Alert.alert(
+        "Error",
+        "Integrated Products Price should be between 1000 and 2600 dollars",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]
+      );
+    } else {
+      updateProduct(priceNumber);
     }
-    else{
-    updateProduct(priceNumber);
-    
-  }
   };
 
-
-  const updateProduct = (priceNumber:number) => 
-  {
-    console.log("productfound pass",appContext?.checkProduct(productName,productId))
-       if(appContext?.checkProduct(productName,params.selectedProduct.id)==true)
-        {
-          appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
-          props.navigation.goBack();
-        }
-      
-  }
+  const updateProduct = (priceNumber: number) => {
+    console.log(
+      "productfound pass",
+      appContext?.checkProduct(productName, productId)
+    );
+    if (
+      appContext?.checkProduct(productName, params.selectedProduct.id) == true
+    ) {
+      appContext?.editProduct(
+        params.selectedProduct.id,
+        productName,
+        priceNumber,
+        selectedProductType
+      );
+      props.navigation.goBack();
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerStyle}>
-         {translate(tokens.screens.EditProductScreen.mainText)} 
+        {translate(tokens.screens.EditProductScreen.mainText)}
       </Text>
       <View style={styles.inputContainer}>
         <TextInput
-          label={translate(
+          placeholder={translate(
             tokens.screens.AddProductScreen.productNameLabelText
           )}
           style={styles.inputStyle}
           defaultValue={params.selectedProduct.productName}
-          onChangeText={(text) => setProductName(text)}
+          onChangeText={text => setProductName(text)}
         />
         <MaterialIcons style={styles.icon} name="add-to-queue" size={30} />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
-          label={translate(
+          placeholder={translate(
             tokens.screens.AddProductScreen.productPriceLabelText
           )}
           style={styles.inputStyle}
@@ -130,7 +139,8 @@ const EditProductScreen: React.FC<IProps> = (props) => {
       <View>
         <TouchableOpacity
           style={styles.pickerStyle}
-          onPress={() => toggleModalVisible(true)}>
+          onPress={() => toggleModalVisible(true)}
+        >
           <Text style={styles.pickerText}>{selectedProductType}</Text>
           <MaterialIcons
             style={styles.dropDownStyle}
@@ -154,7 +164,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
       <View>
         <Button
           title={translate(tokens.screens.AddProductScreen.saveButtonText)}
-          color={saveDisabled ? "grey" : "#8a2be2"}
+          color={saveDisabled ? "grey" : "green"}
           style={styles.btnStyleSave}
           disabled={saveDisabled}
           onPress={() => {
@@ -174,7 +184,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
           color="white"
           style={styles.btnStyleCancel}
           onPress={() => {
-            props.navigation.navigate("DisplayProductScreen");
+            props.navigation.navigate("WeByte");
           }}
         ></Button>
         <Foundation
@@ -202,12 +212,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   inputStyle: {
-    backgroundColor: "white",
+    backgroundColor: "lightgrey",
     fontSize: 25,
     width: "80%",
     height: 50,
-    borderRadius: 15,
     marginTop: 30,
+    borderBottomWidth: 1,
   },
   btnStyleSave: {
     flexDirection: "row",
