@@ -29,8 +29,8 @@ const EditProductScreen: React.FC<IProps> = (props) => {
     const params = props.route.params;
     console.log("selected product id:",params?.selectedProduct);
 
-  const [productName, setProductName] = useState<string>("");
-  const [productPrice, setProductPrice] = useState<string | "">("");
+  const [productName, setProductName] = useState<string>(params.selectedProduct.productName);
+  const [productPrice, setProductPrice] = useState<string | "">(params.selectedProduct.productPrice.toString());
   let priceNumber: number = parseFloat(productPrice);
   const [selectedProductType, setSelectedProductType] = useState<string>(params.selectedProduct.productType);
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
