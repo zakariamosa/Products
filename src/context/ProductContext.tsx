@@ -13,7 +13,7 @@ import { Alert } from "react-native";
     productsList?: IProducts[];
     saveProduct: (product: IProducts) => void;
     editProduct: (id: number,productName:string,productPrice:number,productType:string) => void;
-    checkProduct : (productName:string) => boolean;
+    checkProduct : (productName:string,productID:number) => boolean;
     deleteProduct : (productId:number) => void;
     
   }   
@@ -39,11 +39,11 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
         
       } 
 
-      const checkProduct = (productName:string)=>{
+      const checkProduct = (productName:string, productID: number)=>{
         let theproductexistsbeforeinthelist=true;
-          let productfound = productsList.find(product => product.productName===productName)
-            console.log("productfound", productfound);
-            if (productfound===undefined) 
+        let productfound = productsList.find(product => product.productName===productName&&product.id!==productID)
+        console.log("productfound", productfound);
+        if (productfound===undefined)
             {
               theproductexistsbeforeinthelist=false;
             }
@@ -63,6 +63,8 @@ export const ProductContext = React.createContext<IProductContextType|undefined>
             return true
           }
         }
+
+        
       
     const editProduct = (id: number,productName:string,productPrice:number,productType:string) => {
       console.log("Inside Edit product in context");

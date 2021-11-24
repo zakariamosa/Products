@@ -35,8 +35,6 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   const [selectedProductType, setSelectedProductType] = useState<string>(params.selectedProduct.productType);
   const { showModalVisible, toggleModalVisible } = useToggleModalVisible();
   const [saveDisabled, setSaveDisabled] = useState(false);
-  const [isNameEdited,setIsNameEdited] = useState(false);
-
   
 
   const setModalData = (option: string) => {
@@ -84,21 +82,15 @@ const EditProductScreen: React.FC<IProps> = (props) => {
   };
 
 
-  const updateProduct = (priceNumber:number) => {
-    
-    if(isNameEdited){
-    console.log("productfound pass",appContext?.checkProduct(productName))
-       if(isNameEdited==true && appContext?.checkProduct(productName)==true)
+  const updateProduct = (priceNumber:number) => 
+  {
+    console.log("productfound pass",appContext?.checkProduct(productName,params.selectedProduct.id))
+       if(appContext?.checkProduct(productName,params.selectedProduct.id)==true)
         {
           appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
           props.navigation.goBack();
         }
-      }
-      else{
-          appContext?.editProduct(params.selectedProduct.id,productName,priceNumber,selectedProductType);
-          props.navigation.goBack();
-      }
-    
+      
   }
 
   return (
@@ -113,12 +105,7 @@ const EditProductScreen: React.FC<IProps> = (props) => {
           )}
           style={styles.inputStyle}
           defaultValue={params.selectedProduct.productName}
-          onChangeText={(text) => 
-            {
-            setProductName(text)
-            setIsNameEdited(true)
-          }
-          }
+          onChangeText={(text) => setProductName(text)}
         />
         <MaterialIcons style={styles.icon} name="add-to-queue" size={30} />
       </View>
