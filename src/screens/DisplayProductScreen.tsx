@@ -174,9 +174,10 @@ const styles = StyleSheet.create({
   },
   prodType: {
     fontSize: 24,
+    marginRight:40,
   },
   prodPrice: {
     fontSize: 24,
-    marginRight: 60,
+    marginRight: 80,
   },
 });
